@@ -163,8 +163,11 @@ export default function BetterExperience() {
                 trigger: row,
                 start,
                 end,
-                scrub: 0.95,
+                scrub: mode === "mobile" ? true : 0.95,
                 invalidateOnRefresh: true,
+                onToggle: (self) => {
+                  row.style.willChange = self.isActive ? "transform" : "auto";
+                },
               },
               onUpdate() {
                 row.style.setProperty("--exp-ink", String(this.progress()));

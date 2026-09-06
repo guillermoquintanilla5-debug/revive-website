@@ -125,6 +125,18 @@ export default function Navbar() {
   useEffect(() => () => unlockPage(), [unlockPage]);
 
   useEffect(() => {
+    const onPageShow = () => {
+      if (!menuOpenRef.current) unlockPage();
+    };
+    window.addEventListener("pageshow", onPageShow);
+    window.addEventListener("orientationchange", onPageShow);
+    return () => {
+      window.removeEventListener("pageshow", onPageShow);
+      window.removeEventListener("orientationchange", onPageShow);
+    };
+  }, [unlockPage]);
+
+  useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
 

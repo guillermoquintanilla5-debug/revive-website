@@ -54,35 +54,19 @@ export default function Warranty() {
         gsap.set(halo, { opacity: 0, scale: 1 });
       });
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        section.classList.add("warranty-pending");
-        const title = section.querySelector<HTMLElement>(".warranty-title");
-        if (title) gsap.set(title, { opacity: 0, y: 24 });
-        gsap.to(title, {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: {
-            id: "warranty-heading-enter",
-            trigger: title ?? section,
-            start: "top 82%",
-            once: true,
-            invalidateOnRefresh: true,
-            onEnter: () => section.classList.add("is-in"),
-          },
-        });
-      });
-
       const bind = (
         id: string,
         loopScale: number,
         loopY: number,
         fromScale: number,
         fromY: number,
-        start: string,
-        end: string,
       ) => {
+        section.classList.add("warranty-pending");
+        const title = section.querySelector<HTMLElement>(".warranty-title");
+        if (title) gsap.set(title, { opacity: 0, y: 24 });
+        gsap.set(reveal, { opacity: 0, scale: fromScale, y: fromY });
+        gsap.set(halo, { opacity: 0, scale: 0.9 });
+
         const loopTweens: gsap.core.Tween[] = [];
         let looping = false;
 
@@ -95,7 +79,9 @@ export default function Warranty() {
         };
 
         const startLoop = () => {
-          if (looping) return;
+          if (looping || window.matchMedia("(max-width: 767.98px)").matches) {
+            return;
+          }
           looping = true;
           motion.style.willChange = "transform";
           loopTweens.push(
@@ -118,92 +104,74 @@ export default function Warranty() {
           );
         };
 
-        const apply = (progress: number) => {
-          const t = gsap.utils.clamp(0, 1, progress);
-          gsap.set(reveal, {
-            opacity: t,
-            scale: fromScale + (1 - fromScale) * t,
-            y: fromY * (1 - t),
-          });
+        const headingTween = title
+          ? gsap.fromTo(
+              title,
+              { opacity: 0, y: 24 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.9,
+                ease: "power3.out",
+                paused: true,
+              },
+            )
+          : null;
 
-          if (t < 1) {
-            if (looping) stopLoop();
-            gsap.set(halo, {
-              opacity: 0.08 * t,
-              scale: 0.9,
-            });
-            return;
-          }
-
-          startLoop();
+        const reset = () => {
+          gsap.killTweensOf(reveal);
+          stopLoop();
+          gsap.set(reveal, { opacity: 0, scale: fromScale, y: fromY });
+          gsap.set(halo, { opacity: 0, scale: 0.9 });
+          headingTween?.pause();
+          if (title) gsap.set(title, { opacity: 0, y: 24 });
+          section.classList.remove("is-in");
         };
 
-        const state = { p: 0 };
-        const applyFromState = () => apply(state.p);
-        apply(0);
-
-        const animation = gsap.timeline({ defaults: { ease: "none" } });
-        animation.fromTo(
-          state,
-          { p: 0 },
-          {
-            p: 1,
-            duration: 1,
-            ease: "none",
-            immediateRender: true,
-            onUpdate: applyFromState,
-          },
-          0,
-        );
+        const play = () => {
+          reset();
+          gsap.to(reveal, {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.85,
+            ease: "power3.out",
+            overwrite: true,
+            onComplete: startLoop,
+          });
+          headingTween?.restart();
+          section.classList.remove("is-in");
+          void section.offsetWidth;
+          section.classList.add("is-in");
+        };
 
         ScrollTrigger.create({
           id,
-          animation,
           trigger: section,
-          start,
-          end,
-          scrub: 0.55,
-          pin: false,
+          start: "top 98%",
+          end: "bottom top",
+          onEnter: play,
+          onEnterBack: play,
+          onLeave: reset,
+          onLeaveBack: reset,
           invalidateOnRefresh: true,
-          onRefresh: (self) => {
-            state.p = self.progress;
-            apply(state.p);
-          },
         });
 
         return () => {
-          stopLoop();
+          reset();
+          headingTween?.kill();
           ScrollTrigger.getById(id)?.kill();
-          animation.kill();
         };
       };
 
       mm.add(
         "(prefers-reduced-motion: no-preference) and (max-width: 539.98px)",
-        () =>
-          bind(
-            "warranty-badge-enter-compact",
-            1.025,
-            -3,
-            0.88,
-            16,
-            "top 66%",
-            "top 20%",
-          ),
+        () => bind("warranty-enter-compact", 1.025, -3, 0.88, 16),
       );
 
       mm.add(
         "(prefers-reduced-motion: no-preference) and (min-width: 540px)",
-        () =>
-          bind(
-            "warranty-badge-enter-desktop",
-            1.035,
-            -5,
-            0.86,
-            20,
-            "top 68%",
-            "top 22%",
-          ),
+        () => bind("warranty-enter-desktop", 1.035, -5, 0.86, 20),
       );
     }, section);
 
@@ -228,12 +196,6 @@ export default function Warranty() {
       aria-labelledby="warranty-heading"
     >
       <div className="warranty-shell">
-        <h2 id="warranty-heading" className="warranty-title">
-          5-Year <em>Warranty</em>
-        </h2>
-        <p ref={copyRef} className="warranty-copy">
-          <WaveLine words={WARRANTY_COPY} from={0.1} to={0.72} />
-        </p>
         <div className="warranty-badge-wrap">
           <div ref={revealRef} className="warranty-badge-reveal">
             <div ref={haloRef} className="warranty-halo" aria-hidden="true" />
@@ -244,12 +206,18 @@ export default function Warranty() {
                 width={1425}
                 height={1065}
                 quality={80}
-                sizes="(min-width: 1024px) 20.25rem, 13rem"
+                sizes="(min-width: 1024px) 13.75rem, (min-width: 540px) 11.8125rem, 10.25rem"
                 className="warranty-badge"
               />
             </div>
           </div>
         </div>
+        <h2 id="warranty-heading" className="warranty-title">
+          5-Year <em>Warranty</em>
+        </h2>
+        <p ref={copyRef} className="warranty-copy">
+          <WaveLine words={WARRANTY_COPY} from={0.1} to={0.72} />
+        </p>
       </div>
     </section>
   );

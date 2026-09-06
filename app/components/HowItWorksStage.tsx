@@ -6,8 +6,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
- * How It Works: one scrubbed timeline, no pin. Cards open in
- * sequence from CSS --p as the section travels through the viewport.
+ * How It Works: desktop/tablet use a scrubbed --p timeline.
+ * Mobile uses discrete open/close tweens so height is not tied to scroll.
  */
 export default function HowItWorksStage({
   media,
@@ -68,7 +68,7 @@ export default function HowItWorksStage({
 
       const next = document.getElementById("smarter-alternative");
 
-      const bind = (closed: number, start: string, reverseShift: number) => {
+      const bindScrub = (closed: number, start: string, smooth: boolean) => {
         const open = 0.2;
         const t1 = closed;
         const t2 = 0.27;
@@ -87,37 +87,16 @@ export default function HowItWorksStage({
           .fromTo(card04, { "--p": 0 }, { "--p": 1, duration: open }, t4)
           .to({}, { duration: Math.max(0.08, 1 - done) }, done);
 
-        const reverseCloseAt = Math.min(0.98, done + reverseShift);
-        const mapReverse = (p: number) => {
-          if (p >= reverseCloseAt) {
-            return (
-              done + ((p - reverseCloseAt) / (1 - reverseCloseAt)) * (1 - done)
-            );
-          }
-          return (p / reverseCloseAt) * done;
-        };
-
-        let prev = -1;
         ScrollTrigger.create({
           id: "hiw-cards",
+          animation: timeline,
           trigger: stage,
           start,
           endTrigger: next ?? stage,
           end: next ? "top 85%" : "bottom bottom",
           pin: false,
+          scrub: smooth ? 0.65 : true,
           invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const raw = self.progress;
-            const goingUp = prev >= 0 && raw < prev - 0.0001;
-            prev = raw;
-            const mapped = goingUp ? mapReverse(raw) : raw;
-            gsap.to(timeline, {
-              progress: mapped,
-              duration: 0.65,
-              ease: "none",
-              overwrite: true,
-            });
-          },
         });
 
         return () => {
@@ -127,9 +106,53 @@ export default function HowItWorksStage({
         };
       };
 
+      const bindDiscrete = () => {
+        const opened = [false, false, false, false];
+        const gates = [0.12, 0.28, 0.45, 0.62];
+        const tweens: gsap.core.Tween[] = [];
+
+        const setOpen = (index: number, open: boolean) => {
+          if (opened[index] === open) return;
+          opened[index] = open;
+          tweens[index]?.kill();
+          tweens[index] = gsap.to(cards[index], {
+            "--p": open ? 1 : 0,
+            duration: 0.48,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        };
+
+        const sync = (progress: number) => {
+          gates.forEach((gate, index) => setOpen(index, progress >= gate));
+        };
+
+        ScrollTrigger.create({
+          id: "hiw-cards-mobile",
+          trigger: stage,
+          start: "top 70%",
+          endTrigger: next ?? stage,
+          end: next ? "top 85%" : "bottom bottom",
+          pin: false,
+          onUpdate: (self) => sync(self.progress),
+          onLeave: () => gates.forEach((_, index) => setOpen(index, false)),
+          onLeaveBack: () => gates.forEach((_, index) => setOpen(index, false)),
+        });
+
+        return () => {
+          tweens.forEach((tween) => tween?.kill());
+          ScrollTrigger.getById("hiw-cards-mobile")?.kill();
+          gsap.set(cards, { "--p": 0 });
+        };
+      };
+
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px)", () => bind(0.1, "top 64%", 0.12));
-      mm.add("(max-width: 1023.98px)", () => bind(0.11, "top 66%", 0.14));
+      mm.add("(min-width: 1024px)", () => bindScrub(0.1, "top 64%", true));
+      mm.add(
+        "(min-width: 768px) and (max-width: 1023.98px)",
+        () => bindScrub(0.11, "top 66%", false),
+      );
+      mm.add("(max-width: 767.98px)", () => bindDiscrete());
     }, stage);
 
     return () => ctx.revert();

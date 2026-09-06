@@ -1,7 +1,6 @@
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import HowItWorks from "./components/HowItWorks";
-import HeroHiwOverlap from "./components/HeroHiwOverlap";
 import SmarterAlternative from "./components/SmarterAlternative";
 import Warranty from "./components/Warranty";
 import Qualify from "./components/Qualify";
@@ -17,7 +16,8 @@ export default function Home() {
     <>
       <main>
         <Navbar />
-        <HeroHiwOverlap hero={<Hero />} incoming={<HowItWorks />} />
+        <Hero />
+        <HowItWorks />
         <SmarterAlternative />
         <Warranty />
         <Qualify />

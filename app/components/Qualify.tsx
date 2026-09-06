@@ -226,8 +226,12 @@ export default function Qualify() {
           });
         };
 
+        let primed = false;
         const applyFrom = (progress: number) => {
-          state.p = gsap.utils.clamp(0, 1, progress);
+          const next = gsap.utils.clamp(0, 1, progress);
+          if (primed && Math.abs(next - state.p) < 0.003) return;
+          primed = true;
+          state.p = next;
           apply();
         };
 

@@ -109,6 +109,7 @@ export default function Process() {
         textY: number,
         start: string,
         end: string,
+        scrub: number | boolean,
       ) => {
         const state = { p: 0 };
         let ratios = [0.18, 0.5, 0.82];
@@ -199,7 +200,7 @@ export default function Process() {
           start,
           endTrigger: section,
           end,
-          scrub: 0.75,
+          scrub,
           pin: false,
           invalidateOnRefresh: true,
           onRefresh: () => {
@@ -220,17 +221,25 @@ export default function Process() {
 
       mm.add(
         "(prefers-reduced-motion: no-preference) and (max-width: 539.98px)",
-        () => bind("process-progress-compact", 7, "top 75%", "bottom bottom"),
+        () => bind("process-progress-compact", 7, "top 75%", "bottom bottom", true),
       );
 
       mm.add(
-        "(prefers-reduced-motion: no-preference) and (min-width: 540px)",
-        () => bind("process-progress-desktop", 8, "top 70%", "bottom bottom"),
+        "(prefers-reduced-motion: no-preference) and (min-width: 540px) and (max-width: 1023.98px)",
+        () => bind("process-progress-tablet", 8, "top 70%", "bottom bottom", true),
+      );
+
+      mm.add(
+        "(prefers-reduced-motion: no-preference) and (min-width: 1024px)",
+        () => bind("process-progress-desktop", 8, "top 70%", "bottom bottom", 0.75),
       );
 
       void document.fonts?.ready.then(() => {
-        if (ScrollTrigger.getById("process-progress-compact") ||
-          ScrollTrigger.getById("process-progress-desktop")) {
+        if (
+          ScrollTrigger.getById("process-progress-compact") ||
+          ScrollTrigger.getById("process-progress-tablet") ||
+          ScrollTrigger.getById("process-progress-desktop")
+        ) {
           ScrollTrigger.refresh();
         }
       });

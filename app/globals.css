@@ -1049,31 +1049,6 @@ html.nav-locked body {
   }
 }
 
-/* Hero → Replace/Revive overlap. Stacked planes only; no visual redesign.
-   Incoming is never transformed so the card ScrollTrigger keeps native geometry. */
-.hero-hiw-overlap {
-  position: relative;
-  isolation: isolate;
-  overflow-x: clip;
-}
-
-.hero-outgoing-layer {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  background: #000;
-}
-
-.hero-outgoing-shift {
-  position: relative;
-}
-
-.hiw-incoming-layer {
-  position: relative;
-  z-index: 2;
-  background: #000;
-}
-
 /* In-flow scene. Layout is content-driven (min-height: 100svh, height: auto)
    so expanded cards are never clipped. */
 .hiw {
@@ -1105,6 +1080,18 @@ html.nav-locked body {
   overflow: hidden;
   isolation: isolate;
   pointer-events: none;
+}
+
+@media (max-width: 767.98px) {
+  .hiw-media {
+    height: 100%;
+  }
+
+  .hiw-viewport-stage,
+  .hiw-card-stack,
+  .hiw-proto-card {
+    overflow-anchor: none;
+  }
 }
 
 .hiw-bg {
@@ -2016,6 +2003,12 @@ html.nav-locked body {
   animation: alt-rise 0.8s var(--ease-premium) 0.2s both;
 }
 
+@media (min-width: 1024px) {
+  .alt.is-in .alt-copy {
+    animation-delay: 0.12s;
+  }
+}
+
 @keyframes alt-rise {
   from {
     opacity: 0;
@@ -2097,11 +2090,7 @@ html.nav-locked body {
   .alt-wave-char,
   .alt.is-in .alt-title,
   .alt.is-in .alt-copy,
-  .alt.is-in .alt-figure,
-  .warranty-title,
-  .warranty-copy,
-  .warranty.is-in .warranty-title,
-  .warranty.is-in .warranty-copy {
+  .alt.is-in .alt-figure {
     animation: none;
     opacity: 1;
     transform: none;
@@ -2122,6 +2111,15 @@ html.nav-locked body {
 
   .warranty-copy {
     --alt-wave: 1;
+  }
+
+  .warranty-title,
+  .warranty-copy,
+  .warranty.is-in .warranty-title,
+  .warranty.is-in .warranty-copy {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 
   .warranty-halo {
@@ -2157,17 +2155,18 @@ html.nav-locked body {
   box-sizing: border-box;
   width: min(100%, 46rem);
   margin-inline: auto;
-  padding: 72px clamp(20px, 5.2vw, 48px) 60px;
+  padding: 32px clamp(20px, 5.2vw, 48px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0;
   text-align: center;
 }
 
 .warranty-badge {
   display: block;
-  width: clamp(12rem, 38vw, 20.25rem);
+  width: clamp(9.125rem, 41.5vw, 10.6875rem);
   height: auto;
   filter: drop-shadow(0 12px 35px rgb(0 0 0 / 0.25));
 }
@@ -2177,7 +2176,7 @@ html.nav-locked body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 32px;
+  margin: 0 0 8px;
   isolation: isolate;
 }
 
@@ -2215,7 +2214,7 @@ html.nav-locked body {
 .warranty-title {
   margin: 0;
   font-weight: 800;
-  font-size: clamp(2.4rem, 5.5vw, 3.9rem);
+  font-size: clamp(1.875rem, 6.2vw, 2.25rem);
   line-height: 1.1;
   letter-spacing: -0.038em;
 }
@@ -2231,10 +2230,10 @@ html.nav-locked body {
   --alt-wave-settle: 0.078;
   --alt-ink: rgb(255 255 255 / 0.82);
   --alt-wave-muted: rgb(245 245 245 / 0.26);
-  margin: 20px 0 0;
-  max-width: 34rem;
+  margin: 6px 0 0;
+  max-width: min(32.5rem, 100%);
   color: var(--alt-ink);
-  font-size: clamp(1rem, 1.45vw, 1.25rem);
+  font-size: clamp(0.9375rem, 3.6vw, 1rem);
   font-weight: 400;
   line-height: 1.55;
   letter-spacing: 0.01em;
@@ -2249,24 +2248,38 @@ html.nav-locked body {
   animation: alt-rise 0.8s var(--ease-premium) 0.2s both;
 }
 
+@media (min-width: 540px) {
+  .warranty-badge {
+    width: 11.8125rem;
+  }
+
+  .warranty-shell {
+    padding: 36px clamp(24px, 5.2vw, 56px);
+  }
+}
+
 @media (min-width: 1024px) {
   .warranty-shell {
-    padding: 80px clamp(40px, 5.2vw, 88px) 68px;
+    padding: 44px clamp(40px, 5.2vw, 88px);
+  }
+
+  .warranty-badge {
+    width: 13.75rem;
   }
 
   .warranty-title {
-    font-size: clamp(3rem, 4.6vw, 4.25rem);
+    font-size: clamp(2.625rem, 3.1vw, 3rem);
   }
 
   .warranty-copy {
-    margin-top: 18px;
-    max-width: 42.5rem;
-    font-size: clamp(1.25rem, 1.05rem + 0.3vw, 1.375rem);
+    margin-top: 8px;
+    max-width: 32.5rem;
+    font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
     line-height: 1.5;
   }
 
   .warranty-badge-wrap {
-    margin-top: 34px;
+    margin: 0 0 10px;
   }
 }
 
@@ -3587,7 +3600,6 @@ html.gallery-lb-open body {
   margin: 0;
   padding: 40px 0;
   border-bottom: 1px solid rgb(23 23 23 / 0.08);
-  will-change: transform;
 }
 
 .experience-row:last-child {
@@ -3658,6 +3670,16 @@ html.gallery-lb-open body {
 
   .experience-line-gap {
     display: none;
+  }
+}
+
+@media (max-width: 539.98px) {
+  .experience-title-lead {
+    display: inline;
+  }
+
+  .experience-title {
+    font-size: clamp(1.75rem, 8.4vw, 2.05rem);
   }
 }
 

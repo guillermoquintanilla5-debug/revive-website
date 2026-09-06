@@ -68,13 +68,16 @@ export default function SmarterAlternative() {
 
     section.classList.add("alt-pending");
 
+    const desktop = window.matchMedia("(min-width: 1024px)");
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         section.classList.add("is-in");
         observer.disconnect();
       },
-      { threshold: 0.22, rootMargin: "0px 0px -8% 0px" },
+      desktop.matches
+        ? { threshold: 0, rootMargin: "0px" }
+        : { threshold: 0.22, rootMargin: "0px 0px -8% 0px" },
     );
 
     observer.observe(section);
@@ -84,11 +87,15 @@ export default function SmarterAlternative() {
   useLayoutEffect(() => {
     const copy = copyRef.current;
     if (!copy) return;
-    return attachGradientWave(copy, {
-      compact: "alt-copy-wave-compact",
-      tablet: "alt-copy-wave-tablet",
-      desktop: "alt-copy-wave-desktop",
-    });
+    return attachGradientWave(
+      copy,
+      {
+        compact: "alt-copy-wave-compact",
+        tablet: "alt-copy-wave-tablet",
+        desktop: "alt-copy-wave-desktop",
+      },
+      { desktop: "top 92%" },
+    );
   }, []);
 
   useLayoutEffect(() => {
@@ -116,7 +123,7 @@ export default function SmarterAlternative() {
         id: string,
         start: string,
         end: string,
-        scrub: number,
+        scrub: number | boolean,
       ) => {
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
@@ -164,11 +171,11 @@ export default function SmarterAlternative() {
       };
 
       mm.add("(max-width: 1023.98px)", () =>
-        bindReveal("alt-compare-reveal-compact", "top 70%", "top 42%", 0.7),
+        bindReveal("alt-compare-reveal-compact", "top 90%", "top 42%", true),
       );
 
       mm.add("(min-width: 1024px)", () =>
-        bindReveal("alt-compare-reveal-desktop", "top 62%", "top 36%", 0.7),
+        bindReveal("alt-compare-reveal-desktop", "top 90%", "top 36%", 0.7),
       );
     }, figure);
 

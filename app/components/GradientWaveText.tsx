@@ -74,6 +74,7 @@ export function WaveLine({
 export function attachGradientWave(
   copy: HTMLElement,
   ids: { compact: string; tablet: string; desktop: string },
+  starts?: { desktop?: string },
 ) {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -84,7 +85,7 @@ export function attachGradientWave(
       copy.style.setProperty("--alt-wave", "1");
     });
 
-    const bindWave = (id: string, start: string, end: string, scrub: number) => {
+    const bindWave = (id: string, start: string, end: string, scrub: number | boolean) => {
       const state = { p: 0 };
       const apply = () => {
         copy.style.setProperty("--alt-wave", String(state.p));
@@ -130,7 +131,7 @@ export function attachGradientWave(
 
     mm.add(
       "(prefers-reduced-motion: no-preference) and (max-width: 539.98px)",
-      () => bindWave(ids.compact, "top 68%", "bottom 64%", 0.65),
+      () => bindWave(ids.compact, "top 68%", "bottom 64%", true),
     );
 
     mm.add(
@@ -140,7 +141,7 @@ export function attachGradientWave(
 
     mm.add(
       "(prefers-reduced-motion: no-preference) and (min-width: 1024px)",
-      () => bindWave(ids.desktop, "top 70%", "bottom 42%", 0.7),
+      () => bindWave(ids.desktop, starts?.desktop ?? "top 70%", "bottom 42%", 0.7),
     );
   }, copy);
 
