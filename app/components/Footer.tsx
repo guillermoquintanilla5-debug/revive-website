@@ -68,15 +68,7 @@ export default function Footer() {
                 width={1192}
                 height={560}
                 sizes="188px"
-                className="site-footer-logo site-footer-logo--on-light"
-              />
-              <Image
-                src="/images/logo-white.png"
-                alt="Revive Roof Solutions"
-                width={1229}
-                height={627}
-                sizes="188px"
-                className="site-footer-logo site-footer-logo--on-dark"
+                className="site-footer-logo"
               />
             </div>
             <p className="site-footer-tagline">

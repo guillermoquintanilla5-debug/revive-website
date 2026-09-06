@@ -174,7 +174,71 @@ export default function SmarterAlternative() {
         };
       };
 
-      mm.add("(max-width: 1023.98px)", () =>
+      // Mobile: one-shot open on the way down; stay open; reverse only on
+      // leaveBack (scroll up past the same threshold). Never reset on leave.
+      const bindRevealOnce = (id: string, start: string) => {
+        const timeline = gsap.timeline({
+          defaults: { ease: "none" },
+          paused: true,
+        });
+
+        timeline
+          .fromTo(
+            reveal,
+            { clipPath: "inset(0% 49.5% 0% 49.5%)" },
+            { clipPath: "inset(0% 0% 0% 0%)", duration: 1 },
+            0,
+          )
+          .fromTo(photo, { scale: 1.03 }, { scale: 1, duration: 1 }, 0)
+          .fromTo(
+            before,
+            { opacity: 0, x: 8 },
+            { opacity: 1, x: 0, duration: 0.42 },
+            0.45,
+          )
+          .fromTo(
+            after,
+            { opacity: 0, x: -8 },
+            { opacity: 1, x: 0, duration: 0.42 },
+            0.45,
+          );
+
+        timeline.eventCallback("onComplete", () => {
+          reveal.style.willChange = "auto";
+        });
+        timeline.eventCallback("onReverseComplete", () => {
+          reveal.style.willChange = "auto";
+        });
+
+        ScrollTrigger.create({
+          id,
+          trigger: figure,
+          start,
+          end: "max",
+          pin: false,
+          invalidateOnRefresh: true,
+          onEnter: () => {
+            reveal.style.willChange = "clip-path";
+            timeline.play();
+          },
+          onLeaveBack: () => {
+            reveal.style.willChange = "clip-path";
+            timeline.reverse();
+          },
+        });
+
+        return () => {
+          reveal.style.willChange = "auto";
+          ScrollTrigger.getById(id)?.kill();
+          timeline.kill();
+        };
+      };
+
+      mm.add("(max-width: 767.98px)", () =>
+        bindRevealOnce("alt-compare-reveal-mobile", "top 90%"),
+      );
+
+      mm.add("(min-width: 768px) and (max-width: 1023.98px)", () =>
         bindReveal("alt-compare-reveal-compact", "top 90%", "top 42%", true),
       );
 

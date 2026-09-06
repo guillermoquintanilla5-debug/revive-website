@@ -8,7 +8,7 @@ import { isLegacyCss } from "../lib/cssMode";
 
 /**
  * How It Works: desktop/tablet use a scrubbed --p timeline.
- * Mobile uses discrete open/close tweens so height is not tied to scroll.
+ * Mobile uses per-card enter/leaveBack one-shot tweens (no scrub, no leave-reset).
  */
 export default function HowItWorksStage({
   media,
@@ -120,54 +120,37 @@ export default function HowItWorksStage({
 
       const bindDiscrete = () => {
         const opened = [false, false, false, false];
-        const gates = [0.12, 0.28, 0.45, 0.62];
-        const tweens: gsap.core.Tween[] = [];
-        const closeOrder = [3, 2, 1, 0];
+        const tweens: Array<gsap.core.Tween | undefined> = [];
 
-        const setOpen = (index: number, open: boolean, delay = 0) => {
+        const setOpen = (index: number, open: boolean) => {
           if (opened[index] === open) return;
           opened[index] = open;
           tweens[index]?.kill();
           tweens[index] = gsap.to(cards[index], {
             "--p": open ? 1 : 0,
-            duration: open ? 0.48 : 0.62,
-            ease: open ? "power2.out" : "power2.inOut",
-            delay: open ? 0 : delay,
+            duration: 0.48,
+            ease: open ? "power2.out" : "power2.in",
             overwrite: true,
           });
         };
 
-        const closeAll = () => {
-          closeOrder.forEach((index, i) => setOpen(index, false, i * 0.06));
-        };
-
-        const sync = (progress: number) => {
-          const shouldOpen = gates.map((gate) => progress >= gate);
-          shouldOpen.forEach((open, index) => {
-            if (open) setOpen(index, true);
-          });
-          closeOrder
-            .filter((index) => opened[index] && !shouldOpen[index])
-            .forEach((index, i) => setOpen(index, false, i * 0.06));
-        };
-
-        ScrollTrigger.create({
-          id: "hiw-cards-mobile",
-          trigger: stage,
-          start: "top 70%",
-          endTrigger: next ?? stage,
-          end: next ? "top 85%" : "bottom bottom",
-          pin: false,
-          onUpdate: (self) => {
-            if (self.isActive) sync(self.progress);
-          },
-          onLeave: closeAll,
-          onLeaveBack: closeAll,
-        });
+        // One threshold per card: open on the way down, close only on the way
+        // back up past the same point. No onLeave / section-exit reset.
+        const triggers = cards.map((card, index) =>
+          ScrollTrigger.create({
+            id: `hiw-card-mobile-${index}`,
+            trigger: card,
+            start: "top 78%",
+            end: "max",
+            pin: false,
+            onEnter: () => setOpen(index, true),
+            onLeaveBack: () => setOpen(index, false),
+          }),
+        );
 
         return () => {
           tweens.forEach((tween) => tween?.kill());
-          ScrollTrigger.getById("hiw-cards-mobile")?.kill();
+          triggers.forEach((trigger) => trigger.kill());
           gsap.set(cards, { "--p": 0 });
         };
       };
