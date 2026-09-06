@@ -110,21 +110,33 @@ export default function HowItWorksStage({
         const opened = [false, false, false, false];
         const gates = [0.12, 0.28, 0.45, 0.62];
         const tweens: gsap.core.Tween[] = [];
+        const closeOrder = [3, 2, 1, 0];
 
-        const setOpen = (index: number, open: boolean) => {
+        const setOpen = (index: number, open: boolean, delay = 0) => {
           if (opened[index] === open) return;
           opened[index] = open;
           tweens[index]?.kill();
           tweens[index] = gsap.to(cards[index], {
             "--p": open ? 1 : 0,
-            duration: 0.48,
-            ease: "power2.out",
+            duration: open ? 0.48 : 0.62,
+            ease: open ? "power2.out" : "power2.inOut",
+            delay: open ? 0 : delay,
             overwrite: true,
           });
         };
 
+        const closeAll = () => {
+          closeOrder.forEach((index, i) => setOpen(index, false, i * 0.06));
+        };
+
         const sync = (progress: number) => {
-          gates.forEach((gate, index) => setOpen(index, progress >= gate));
+          const shouldOpen = gates.map((gate) => progress >= gate);
+          shouldOpen.forEach((open, index) => {
+            if (open) setOpen(index, true);
+          });
+          closeOrder
+            .filter((index) => opened[index] && !shouldOpen[index])
+            .forEach((index, i) => setOpen(index, false, i * 0.06));
         };
 
         ScrollTrigger.create({
@@ -134,9 +146,11 @@ export default function HowItWorksStage({
           endTrigger: next ?? stage,
           end: next ? "top 85%" : "bottom bottom",
           pin: false,
-          onUpdate: (self) => sync(self.progress),
-          onLeave: () => gates.forEach((_, index) => setOpen(index, false)),
-          onLeaveBack: () => gates.forEach((_, index) => setOpen(index, false)),
+          onUpdate: (self) => {
+            if (self.isActive) sync(self.progress);
+          },
+          onLeave: closeAll,
+          onLeaveBack: closeAll,
         });
 
         return () => {
