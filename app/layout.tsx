@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import "./baseline.css";
 import "./globals.css";
 import favicon16 from "./favicon-16x16.png";
 import favicon32 from "./favicon-32x32.png";
 import appleTouchIcon from "./apple-touch-icon.png";
 import icon192 from "./icon-192.png";
 import icon512 from "./icon-512.png";
+
+const CRITICAL_CSS =
+  'html,body{width:100%;max-width:100%;margin:0;overflow-x:hidden}*,*:before,*:after{box-sizing:border-box}.nav-logo{display:block;width:auto;max-width:140px;max-height:58px}.site-nav-desktop{display:none}@media (min-width:1024px){.site-nav-desktop{display:flex}.nav-logo{max-width:180px}.site-nav-toggle{display:none}}';
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -34,7 +38,15 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js');",
+          }}
+        />
+      </head>
       <body className={`${montserrat.variable} font-sans antialiased`}>
         {children}
       </body>

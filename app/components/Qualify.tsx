@@ -88,6 +88,10 @@ export default function Qualify() {
     const ctaBtn = ctaBtnRef.current;
     if (!section || !list || !ctaQ || !ctaBtn) return;
 
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      section.classList.add("qualify-pending");
+    }
+
     const rows = [...list.querySelectorAll<HTMLElement>(".qualify-row")];
     if (rows.length !== 4) return;
 
@@ -399,7 +403,7 @@ export default function Qualify() {
     <section
       ref={sectionRef}
       id="qualify"
-      className="qualify qualify-pending"
+      className="qualify"
       aria-labelledby="qualify-heading"
     >
       <Image

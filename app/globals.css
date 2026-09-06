@@ -260,7 +260,6 @@ body {
 }
 
 .hero-cta-enter {
-  opacity: 0;
   animation: revive-fade-in 0.8s var(--ease-premium) 0.45s both;
 }
 
@@ -1064,6 +1063,7 @@ html.nav-locked body {
   --hiw-stack-max: 74rem;
   position: relative;
   isolation: isolate;
+  overflow-x: hidden;
   overflow-x: clip;
   overflow-y: visible;
   padding: 0;
@@ -1182,8 +1182,8 @@ html.nav-locked body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hiw.hiw-pending:not(.is-in) .hiw-title,
-  .hiw.hiw-pending:not(.is-in) .hiw-sub {
+  .js .hiw.hiw-pending:not(.is-in) .hiw-title,
+  .js .hiw.hiw-pending:not(.is-in) .hiw-sub {
     opacity: 0;
     transform: translate3d(0, 18px, 0);
   }
@@ -1246,6 +1246,7 @@ html.nav-locked body {
   height: calc(var(--h0) + (var(--h1) - var(--h0)) * var(--p));
   padding: 5.36%;
   overflow: hidden;
+  background: #e7efe8;
   background: color-mix(in srgb, #e7efe8 calc((1 - var(--p-bg)) * 100%), #17211c calc(var(--p-bg) * 100%));
   border-radius: 16px;
   box-shadow: none;
@@ -1660,6 +1661,7 @@ html.nav-locked body {
   --alt-body: clamp(1.12rem, 3.68vw, 1.23rem);
   background: var(--alt-paper);
   color: var(--alt-ink);
+  overflow-x: hidden;
   overflow-x: clip;
 }
 
@@ -1805,7 +1807,7 @@ html.nav-locked body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .alt-reveal {
+  .js .alt-reveal {
     clip-path: inset(0% 49.5% 0% 49.5%);
   }
 }
@@ -1989,8 +1991,8 @@ html.nav-locked body {
   }
 }
 
-.alt.alt-pending:not(.is-in) .alt-title,
-.alt.alt-pending:not(.is-in) .alt-copy {
+.js .alt.alt-pending:not(.is-in) .alt-title,
+.js .alt.alt-pending:not(.is-in) .alt-copy {
   opacity: 0;
   transform: translate3d(0, 18px, 0);
 }
@@ -2148,6 +2150,7 @@ html.nav-locked body {
 .warranty {
   background: #0e1712;
   color: #f5f5f5;
+  overflow: hidden;
   overflow: clip;
 }
 
@@ -2189,7 +2192,7 @@ html.nav-locked body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .warranty-badge-reveal {
+  .js .warranty.warranty-pending:not(.is-in) .warranty-badge-reveal {
     opacity: 0;
   }
 }
@@ -2239,7 +2242,7 @@ html.nav-locked body {
   letter-spacing: 0.01em;
 }
 
-.warranty.warranty-pending:not(.is-in) .warranty-copy {
+.js .warranty.warranty-pending:not(.is-in) .warranty-copy {
   opacity: 0;
   transform: translate3d(0, 18px, 0);
 }
@@ -2286,6 +2289,7 @@ html.nav-locked body {
 /* See If Your Roof Qualifies — editorial checklist over the drone photo. */
 .qualify {
   position: relative;
+  overflow: hidden;
   overflow: clip;
   color: #fff;
 }
@@ -2473,22 +2477,22 @@ html.nav-locked body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .qualify.qualify-pending:not(.is-in) .qualify-title,
-  .qualify.qualify-pending:not(.is-in) .qualify-copy {
+  .js .qualify.qualify-pending:not(.is-in) .qualify-title,
+  .js .qualify.qualify-pending:not(.is-in) .qualify-copy {
     opacity: 0;
     transform: translate3d(0, 18px, 0);
   }
 
-  .qualify-num,
-  .qualify-icon-in,
-  .qualify-text-in,
-  .qualify-check-in,
-  .qualify-cta-q,
-  .qualify-btn {
+  .js .qualify-num,
+  .js .qualify-icon-in,
+  .js .qualify-text-in,
+  .js .qualify-check-in,
+  .js .qualify-cta-q,
+  .js .qualify-btn {
     opacity: 0;
   }
 
-  .qualify-rule {
+  .js .qualify-rule {
     transform: scaleX(0);
     transform-origin: left center;
   }
@@ -2639,6 +2643,7 @@ html.nav-locked body {
   --process-rail: 28px;
   background: var(--process-paper);
   color: var(--process-ink);
+  overflow-x: hidden;
   overflow-x: clip;
 }
 
@@ -2893,8 +2898,8 @@ html.nav-locked body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .process.process-pending:not(.is-in) .process-eyebrow,
-  .process.process-pending:not(.is-in) .process-title {
+  .js .process.process-pending:not(.is-in) .process-eyebrow,
+  .js .process.process-pending:not(.is-in) .process-title {
     opacity: 0;
     transform: translate3d(0, 18px, 0);
   }
@@ -3128,6 +3133,7 @@ html.nav-locked body {
   --gallery-slide: 90%;
   background: var(--gallery-paper);
   color: var(--gallery-ink);
+  overflow-x: hidden;
   overflow-x: clip;
 }
 
@@ -3215,7 +3221,7 @@ html.nav-locked body {
   background: var(--gallery-paper);
 }
 
-.gallery:not(.is-ready) .gallery-card {
+.js .gallery:not(.is-ready) .gallery-card {
   opacity: 0;
 }
 
@@ -3537,6 +3543,7 @@ html.gallery-lb-open body {
   --experience-accent: #3f945d;
   background: var(--experience-paper);
   color: var(--experience-ink);
+  overflow-x: hidden;
   overflow-x: clip;
 }
 
@@ -3745,8 +3752,8 @@ html.gallery-lb-open body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .experience.experience-pending:not(.is-in) .experience-eyebrow,
-  .experience.experience-pending:not(.is-in) .experience-title {
+  .js .experience.experience-pending:not(.is-in) .experience-eyebrow,
+  .js .experience.experience-pending:not(.is-in) .experience-title {
     opacity: 0;
     transform: translate3d(0, 18px, 0);
   }
@@ -3784,6 +3791,7 @@ html.gallery-lb-open body {
   --service-ink: #f5f5f5;
   background: var(--service-paper);
   color: var(--service-ink);
+  overflow-x: hidden;
   overflow-x: clip;
 }
 
@@ -3960,9 +3968,9 @@ html.gallery-lb-open body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .service.service-pending:not(.is-in) .service-eyebrow,
-  .service.service-pending:not(.is-in) .service-title,
-  .service.service-pending:not(.is-in) .service-copy {
+  .js .service.service-pending:not(.is-in) .service-eyebrow,
+  .js .service.service-pending:not(.is-in) .service-title,
+  .js .service.service-pending:not(.is-in) .service-copy {
     opacity: 0;
     transform: translate3d(0, 18px, 0);
   }
@@ -4322,6 +4330,7 @@ html.gallery-lb-open body {
   --footer-ink: #f5f5f5;
   background: var(--footer-paper);
   color: var(--footer-ink);
+  overflow-x: hidden;
   overflow-x: clip;
 }
 
@@ -4357,6 +4366,8 @@ html.gallery-lb-open body {
   display: block;
   width: auto;
   height: 46px;
+  max-width: 188px;
+  max-height: 56px;
 }
 
 .site-footer-logo--on-dark {
@@ -5185,7 +5196,7 @@ a.site-footer-line:focus-visible,
     animation: alt-rise 0.85s var(--ease-premium) 0.16s both;
   }
 
-  .journal-pending:not(.is-in) .journal-rise {
+  .js .journal-pending:not(.is-in) .journal-rise {
     opacity: 0;
     transform: translate3d(0, 18px, 0);
   }

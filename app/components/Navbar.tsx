@@ -450,14 +450,14 @@ export default function Navbar() {
       ref={headerRef}
       className={`site-nav${menuOpen ? " is-nav-menu-open" : ""}`}
     >
-      <div className="nav-enter relative z-50 h-[var(--header-h)] w-full bg-white">
+      <div className="nav-enter nav-bar relative z-50 h-[var(--header-h)] w-full bg-white">
       <div className="relative flex h-full w-full items-center justify-end px-5 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-0">
         <Link
           href="/"
           onClick={(event) => {
             if (!goToHref("/", event)) closeMenu();
           }}
-          className="absolute top-1/2 left-1/2 z-10 flex min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center lg:static lg:z-auto lg:min-h-0 lg:min-w-0 lg:translate-x-0 lg:translate-y-0 lg:justify-self-center"
+          className="nav-logo-link absolute top-1/2 left-1/2 z-10 flex min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center lg:static lg:z-auto lg:min-h-0 lg:min-w-0 lg:translate-x-0 lg:translate-y-0 lg:justify-self-center"
         >
           <Image
             src="/images/logo.png"
@@ -465,12 +465,12 @@ export default function Navbar() {
             width={1192}
             height={560}
             sizes="(min-width: 1024px) 180px, 140px"
-            className="h-10 w-auto max-lg:h-[var(--nav-logo-h)] lg:h-[clamp(38px,3.3vw,58px)]"
+            className="nav-logo h-10 w-auto max-lg:h-[var(--nav-logo-h)] lg:h-[clamp(38px,3.3vw,58px)]"
             priority
           />
         </Link>
 
-        <nav className="relative hidden text-[clamp(11.5px,0.979vw,17px)] leading-none lg:flex">
+        <nav className="site-nav-desktop relative hidden text-[clamp(11.5px,0.979vw,17px)] leading-none lg:flex">
           {shifted && (
             <button
               type="button"
@@ -529,13 +529,13 @@ export default function Navbar() {
           )}
         </nav>
 
-        <div className="relative z-20 flex h-full items-center justify-self-end lg:justify-self-center">
+        <div className="site-nav-actions relative z-20 flex h-full items-center justify-self-end lg:justify-self-center">
           <QuoteCta size="nav">Free Quote</QuoteCta>
 
           <button
             ref={toggleRef}
             type="button"
-            className="flex size-11 items-center justify-center text-revive-ink max-lg:size-[var(--nav-burger)] lg:hidden"
+            className="site-nav-toggle flex size-11 items-center justify-center text-revive-ink max-lg:size-[var(--nav-burger)] lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"

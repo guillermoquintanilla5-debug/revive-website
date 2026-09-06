@@ -18,26 +18,26 @@ export default function Hero() {
         />
         <HeroVideo />
       </div>
-      <div className="absolute inset-0 bg-black/65" />
+      <div className="hero-dim absolute inset-0 bg-black/65" />
 
       <div className="hero-stack relative z-10 flex min-h-min w-full flex-1 flex-col text-center lg:block lg:min-h-0 lg:flex-none lg:px-[clamp(20px,4.5vw,96px)] lg:pt-0 lg:text-left">
         <div aria-hidden="true" className="hero-flexspace lg:hidden" />
 
         <h1 className="hero-headline-enter hero-headline font-extrabold lg:text-[clamp(35px,5.35vw,94px)] lg:leading-[1.06] lg:tracking-[0.038em]">
-          <span className="lg:hidden">
+          <span className="hero-title-mobile lg:hidden">
             <span className="block">
-              <span className="text-revive-green">Save Thousands</span>{" "}
-              <span className="text-white">with</span>
+              <span className="hero-accent text-revive-green">Save Thousands</span>{" "}
+              <span className="hero-ink text-white">with</span>
             </span>
-            <span className="block whitespace-nowrap text-revive-green">Roof Rejuvenation</span>
-            <span className="block text-white">in Ottawa</span>
+            <span className="hero-accent block whitespace-nowrap text-revive-green">Roof Rejuvenation</span>
+            <span className="hero-ink block text-white">in Ottawa</span>
           </span>
-          <span className="hidden lg:block">
+          <span className="hero-title-desktop hidden lg:block">
             <span className="block">
-              <span className="text-revive-green">Save Thousands</span> <span className="text-white">with</span>
+              <span className="hero-accent text-revive-green">Save Thousands</span> <span className="hero-ink text-white">with</span>
             </span>
             <span className="block">
-              <span className="text-revive-green">Roof Rejuvenation</span> <span className="text-white">in Ottawa</span>
+              <span className="hero-accent text-revive-green">Roof Rejuvenation</span> <span className="hero-ink text-white">in Ottawa</span>
             </span>
           </span>
         </h1>
