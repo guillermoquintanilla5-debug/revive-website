@@ -6,11 +6,13 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { isLegacyCss } from "../lib/cssMode";
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const footer = footerRef.current;
     if (!footer) return;
 

@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { isLegacyCss } from "../lib/cssMode";
 
 const LOCATIONS = [
   { id: "ottawa", index: "01", name: "Ottawa, ON" },
@@ -25,6 +26,7 @@ export default function ServiceArea() {
   const activateRef = useRef<(index: number) => void>(() => {});
 
   useEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -51,6 +53,7 @@ export default function ServiceArea() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 

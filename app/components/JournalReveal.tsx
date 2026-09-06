@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { isLegacyCss } from "../lib/cssMode";
 
 export default function JournalReveal({
   children,
@@ -12,6 +13,7 @@ export default function JournalReveal({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isLegacyCss()) return;
     const el = ref.current;
     if (!el) return;
 

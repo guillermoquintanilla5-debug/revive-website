@@ -12,6 +12,7 @@ import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
+import { isLegacyCss } from "../lib/cssMode";
 
 const GALLERY_ITEMS = [
   {
@@ -366,6 +367,7 @@ export default function Gallery() {
   );
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -408,6 +410,7 @@ export default function Gallery() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     const viewport = viewportRef.current;
     if (!section || !viewport) return;
@@ -434,6 +437,7 @@ export default function Gallery() {
   }, [measure]);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const prev = prevBtnRef.current;
     if (!prev) return;
     const reduce = reduceRef.current;
@@ -449,6 +453,7 @@ export default function Gallery() {
   }, [showPrev]);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const viewport = viewportRef.current;
     const track = trackRef.current;
     if (!viewport || !track) return;
@@ -829,6 +834,19 @@ export default function Gallery() {
             <em>difference</em>.
           </h2>
         </header>
+
+        <ul className="legacy-gallery">
+          {GALLERY_ITEMS.map((item) => (
+            <li key={item.src}>
+              <img
+                src={item.src}
+                alt={item.alt}
+                width={item.width}
+                height={item.height}
+              />
+            </li>
+          ))}
+        </ul>
 
         <div
           className="gallery-frame"

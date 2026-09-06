@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CalendarDays, Check, House, ShieldCheck, Sun } from "lucide-react";
 import QuoteCta from "./QuoteCta";
+import { isLegacyCss } from "../lib/cssMode";
 
 const criteria = [
   {
@@ -58,6 +59,7 @@ export default function Qualify() {
   const ctaBtnRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -82,6 +84,7 @@ export default function Qualify() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     const list = listRef.current;
     const ctaQ = ctaQRef.current;

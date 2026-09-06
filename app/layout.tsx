@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
-import "./baseline.css";
 import "./globals.css";
+import "./legacy.css";
 import favicon16 from "./favicon-16x16.png";
 import favicon32 from "./favicon-32x32.png";
 import appleTouchIcon from "./apple-touch-icon.png";
 import icon192 from "./icon-192.png";
 import icon512 from "./icon-512.png";
 
-const CRITICAL_CSS =
-  'html,body{width:100%;max-width:100%;margin:0;overflow-x:hidden}*,*:before,*:after{box-sizing:border-box}.nav-logo{display:block;width:auto;max-width:140px;max-height:58px}.site-nav-desktop{display:none}@media (min-width:1024px){.site-nav-desktop{display:flex}.nav-logo{max-width:180px}.site-nav-toggle{display:none}}';
+const CAPABILITY_BOOT = `(function(){var r=document.documentElement;var force=false;try{force=/(?:^|[?&])legacy=1(?:&|$)/.test(location.search)}catch(e){}var modern=false;try{if(window.CSS&&CSS.supports&&CSS.supports("color","color-mix(in srgb,#088635,#000)")){var s=document.createElement("style");s.textContent="@layer __revive_probe{html{--__revive_layers:1}}";document.head.appendChild(s);modern=getComputedStyle(r).getPropertyValue("--__revive_layers").trim()==="1";s.remove()}}catch(e){}if(force||!modern){r.classList.add("legacy-css")}else{r.classList.add("js","modern-css")}})();`;
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -40,12 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js');",
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: CAPABILITY_BOOT }} />
       </head>
       <body className={`${montserrat.variable} font-sans antialiased`}>
         {children}

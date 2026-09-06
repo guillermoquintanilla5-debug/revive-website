@@ -1,0 +1,642 @@
+/*
+  Compatibility mode only.
+
+  Modern browsers receive html.modern-css and never match html.legacy-css.
+  Unlayered rules here MUST stay scoped under html.legacy-css so they cannot
+  override Tailwind @layer utilities on supported engines.
+
+  Force this mode in any browser with ?legacy=1
+*/
+
+/* Hide the static gallery grid unless legacy mode is active. */
+.legacy-gallery {
+  display: none;
+}
+
+html.legacy-css,
+html.legacy-css *,
+html.legacy-css *::before,
+html.legacy-css *::after {
+  box-sizing: border-box;
+}
+
+html.legacy-css {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.legacy-css body {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  color: #222;
+  background: #fff;
+  font-family: var(--font-montserrat), "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.45;
+}
+
+html.legacy-css main {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+html.legacy-css img:not(.qualify-photo):not(.hiw-bg):not(.contact-media-img):not(.nav-logo) {
+  max-width: 100%;
+}
+
+html.legacy-css .hero-badge-usda,
+html.legacy-css .hero-badge-soy,
+html.legacy-css .warranty-badge,
+html.legacy-css .alt-photo,
+html.legacy-css .legacy-gallery img,
+html.legacy-css .site-footer-logo {
+  height: auto;
+}
+
+html.legacy-css .site-nav,
+html.legacy-css .hero,
+html.legacy-css .hiw,
+html.legacy-css .alt,
+html.legacy-css .warranty,
+html.legacy-css .qualify,
+html.legacy-css .process,
+html.legacy-css .gallery,
+html.legacy-css .experience,
+html.legacy-css .service,
+html.legacy-css .contact,
+html.legacy-css .site-footer {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Navbar */
+html.legacy-css .nav-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 60px;
+  padding: 0 16px;
+  background: #fff;
+}
+
+html.legacy-css .nav-logo-link {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  transform: translate(-50%, -50%);
+}
+
+html.legacy-css .nav-logo {
+  display: block;
+  width: auto;
+  height: 40px;
+  max-width: 140px;
+  max-height: 52px;
+}
+
+html.legacy-css .site-nav-desktop {
+  display: none;
+}
+
+html.legacy-css .site-nav-toggle {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+html.legacy-css .quote-cta--nav {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  html.legacy-css .nav-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    padding: 0 24px;
+  }
+
+  html.legacy-css .nav-logo-link {
+    position: static;
+    transform: none;
+    justify-self: center;
+  }
+
+  html.legacy-css .nav-logo {
+    height: 48px;
+    max-width: 180px;
+  }
+
+  html.legacy-css .site-nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  html.legacy-css .site-nav-desktop a {
+    color: #222;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  html.legacy-css .site-nav-toggle,
+  html.legacy-css .mobile-nav-panel {
+    display: none;
+  }
+
+  html.legacy-css .quote-cta--nav {
+    display: inline-flex;
+  }
+}
+
+/* Hero */
+html.legacy-css .hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 28rem !important;
+  height: auto !important;
+  color: #fff;
+  background: #0a0f0c;
+}
+
+html.legacy-css .hero-visual-enter,
+html.legacy-css .hero-dim {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+html.legacy-css .hero-visual-enter img,
+html.legacy-css .hero-visual-enter video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+html.legacy-css .hero-dim {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+html.legacy-css .hero-stack {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 28px 20px 16px;
+  text-align: center;
+}
+
+html.legacy-css .hero-flexspace,
+html.legacy-css .hero-cta-spacer {
+  display: none;
+}
+
+html.legacy-css .hero-headline {
+  margin: 0;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+html.legacy-css .hero-accent {
+  color: #088635;
+}
+
+html.legacy-css .hero-ink,
+html.legacy-css .hero-sub {
+  color: #fff;
+}
+
+html.legacy-css .hero-title-desktop {
+  display: none;
+}
+
+html.legacy-css .hero-title-mobile {
+  display: block;
+}
+
+html.legacy-css .hero-sub {
+  margin: 14px auto 0;
+  max-width: 28em;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+html.legacy-css .hero-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+html.legacy-css .hero-desk-quote,
+html.legacy-css .hero-desk-contact {
+  display: none;
+}
+
+html.legacy-css .hero-mob-cta {
+  display: flex;
+  width: 100%;
+}
+
+html.legacy-css .hero-trust {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+html.legacy-css .hero-badge-usda {
+  width: 120px;
+  max-width: 42vw;
+  height: auto;
+}
+
+html.legacy-css .hero-badge-soy {
+  width: 76px;
+  max-width: 26vw;
+  height: auto;
+}
+
+@media (min-width: 1024px) {
+  html.legacy-css .hero-stack {
+    padding: 72px 64px 48px;
+    text-align: left;
+  }
+
+  html.legacy-css .hero-title-mobile {
+    display: none;
+  }
+
+  html.legacy-css .hero-title-desktop {
+    display: block;
+  }
+
+  html.legacy-css .hero-headline {
+    font-size: 56px;
+  }
+
+  html.legacy-css .hero-cta {
+    display: flex;
+    justify-content: flex-start;
+    width: auto;
+  }
+
+  html.legacy-css .hero-mob-cta {
+    display: none;
+  }
+
+  html.legacy-css .hero-desk-quote,
+  html.legacy-css .hero-desk-contact {
+    display: inline-flex;
+  }
+
+  html.legacy-css .hero-trust {
+    justify-content: flex-end;
+    padding: 0 64px 48px;
+  }
+}
+
+/* Replace or Revive — static summary cards, natural height */
+html.legacy-css .hiw,
+html.legacy-css .hiw-viewport-stage,
+html.legacy-css .hiw-content,
+html.legacy-css .hiw-stack,
+html.legacy-css .hiw-card-stack,
+html.legacy-css .hiw-stack-item,
+html.legacy-css .hiw-proto,
+html.legacy-css .hiw-proto-card {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none;
+}
+
+html.legacy-css .hiw-viewport-stage {
+  overflow: visible;
+  padding: 36px 16px 40px;
+}
+
+html.legacy-css .hiw-media {
+  position: absolute;
+  inset: 0;
+  height: auto !important;
+  min-height: 100% !important;
+  max-height: 100%;
+}
+
+html.legacy-css .hiw-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+html.legacy-css .hiw-title,
+html.legacy-css .hiw-sub {
+  opacity: 1;
+  transform: none;
+}
+
+html.legacy-css .hiw-card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+html.legacy-css .hiw-proto-card {
+  --p: 0;
+  height: auto;
+  min-height: 0;
+  padding: 16px 18px;
+  overflow: hidden;
+  background: #e7efe8;
+  color: #17211c;
+}
+
+html.legacy-css .hiw-proto-collapsed {
+  display: flex;
+  align-items: center;
+  height: auto;
+  gap: 12px;
+  opacity: 1;
+}
+
+html.legacy-css .hiw-proto-expanded,
+html.legacy-css .hiw-proto-index {
+  display: none;
+}
+
+html.legacy-css .hiw-proto-collapsed h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Smarter Alternative — full image, no clip, no reserved gap */
+html.legacy-css .alt {
+  padding: 0;
+  min-height: 0;
+}
+
+html.legacy-css .alt-shell {
+  padding: 36px 20px 40px !important;
+  gap: 20px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+html.legacy-css .alt-title,
+html.legacy-css .alt-copy,
+html.legacy-css .alt-copy p,
+html.legacy-css .alt-copy span,
+html.legacy-css .alt-wave-char {
+  opacity: 1;
+  transform: none;
+  color: #1a1a1a;
+}
+
+html.legacy-css .alt-title em,
+html.legacy-css .alt-wave-char--hold {
+  color: #088635;
+}
+
+html.legacy-css .alt-copy {
+  --alt-wave: 1;
+}
+
+html.legacy-css .alt-frame {
+  aspect-ratio: auto;
+  height: auto;
+  overflow: visible;
+}
+
+html.legacy-css .alt-reveal {
+  position: static;
+  width: 100%;
+  height: auto;
+  clip-path: none;
+  transform: none;
+  opacity: 1;
+}
+
+html.legacy-css .alt-photo {
+  width: 100%;
+  height: auto;
+  clip-path: none;
+  transform: none;
+  opacity: 1;
+  object-fit: contain;
+}
+
+html.legacy-css .alt-figure {
+  margin: 8px 0 0;
+  width: 100%;
+  max-width: 28rem;
+}
+
+/* Warranty — compact static */
+html.legacy-css .warranty {
+  padding: 28px 20px;
+}
+
+html.legacy-css .warranty-badge-reveal,
+html.legacy-css .warranty-title,
+html.legacy-css .warranty-copy,
+html.legacy-css .warranty-copy span {
+  opacity: 1;
+  transform: none;
+}
+
+html.legacy-css .warranty-badge {
+  width: 140px;
+  max-width: 42vw;
+  height: auto;
+}
+
+html.legacy-css .warranty-halo {
+  display: none;
+}
+
+/* Qualify — real content, no empty photo stage */
+html.legacy-css .qualify {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+html.legacy-css .qualify-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+html.legacy-css .qualify-shell {
+  padding: 40px 20px;
+}
+
+html.legacy-css .qualify-title,
+html.legacy-css .qualify-copy,
+html.legacy-css .qualify-num,
+html.legacy-css .qualify-icon-in,
+html.legacy-css .qualify-text-in,
+html.legacy-css .qualify-check-in,
+html.legacy-css .qualify-cta-q,
+html.legacy-css .qualify-btn,
+html.legacy-css .qualify-rule {
+  opacity: 1;
+  transform: none;
+}
+
+html.legacy-css .qualify-list,
+html.legacy-css .qualify-row,
+html.legacy-css .qualify-cta {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Process */
+html.legacy-css .process-step {
+  --on: 1;
+}
+
+html.legacy-css .process-eyebrow,
+html.legacy-css .process-title,
+html.legacy-css .process-step,
+html.legacy-css .process-step-title-in,
+html.legacy-css .process-step-copy-in {
+  opacity: 1;
+  transform: none;
+}
+
+html.legacy-css .process-track-progress {
+  transform: none;
+}
+
+/* Gallery — static photo grid, no JS carousel */
+html.legacy-css .gallery-frame,
+html.legacy-css .gallery-viewport,
+html.legacy-css .gallery-arrow,
+html.legacy-css .gallery-lb {
+  display: none;
+}
+
+html.legacy-css .legacy-gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+html.legacy-css .legacy-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+html.legacy-css .gallery {
+  padding: 36px 20px 40px;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+html.legacy-css .gallery-shell {
+  min-height: 0;
+  height: auto;
+}
+
+html.legacy-css .gallery-eyebrow,
+html.legacy-css .gallery-title {
+  opacity: 1;
+  transform: none;
+}
+
+@media (min-width: 600px) {
+  html.legacy-css .legacy-gallery {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Better Experience */
+html.legacy-css .experience-row {
+  opacity: 1;
+  transform: none;
+  --exp-ink: 1;
+}
+
+html.legacy-css .experience-eyebrow,
+html.legacy-css .experience-title {
+  opacity: 1;
+  transform: none;
+}
+
+/* Service / contact / footer / journal */
+html.legacy-css .service-eyebrow,
+html.legacy-css .service-title,
+html.legacy-css .service-copy,
+html.legacy-css .contact-eyebrow,
+html.legacy-css .contact-title,
+html.legacy-css .contact-cta,
+html.legacy-css .contact-phone,
+html.legacy-css .site-footer-brand,
+html.legacy-css .site-footer-contact,
+html.legacy-css .journal-rise {
+  opacity: 1;
+  transform: none;
+}
+
+html.legacy-css .contact,
+html.legacy-css .service-shell,
+html.legacy-css .service-map {
+  min-height: 0;
+  height: auto;
+}
+
+html.legacy-css .contact-media-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+html.legacy-css .site-footer-logo {
+  height: 46px;
+  max-width: 180px;
+}

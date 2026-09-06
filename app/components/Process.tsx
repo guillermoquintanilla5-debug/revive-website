@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Drone, Droplet, Satellite } from "lucide-react";
+import { isLegacyCss } from "../lib/cssMode";
 
 const steps = [
   {
@@ -37,6 +38,7 @@ export default function Process() {
   const listRef = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -63,6 +65,7 @@ export default function Process() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     const timelineRoot = timelineRef.current;
     const track = trackRef.current;

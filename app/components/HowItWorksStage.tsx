@@ -4,6 +4,7 @@ import { CircleDollarSign, Clock, House, PiggyBank } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { isLegacyCss } from "../lib/cssMode";
 
 /**
  * How It Works: desktop/tablet use a scrubbed --p timeline.
@@ -24,6 +25,16 @@ export default function HowItWorksStage({
   const card04Ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (!isLegacyCss()) return;
+    const stage = stageRef.current;
+    if (!stage) return;
+    stage.querySelectorAll(".hiw-proto-collapsed").forEach((el) => {
+      el.removeAttribute("aria-hidden");
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isLegacyCss()) return;
     const stage = stageRef.current;
     if (!stage) return;
 
@@ -51,6 +62,7 @@ export default function HowItWorksStage({
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const stage = stageRef.current;
     const card01 = card01Ref.current;
     const card02 = card02Ref.current;

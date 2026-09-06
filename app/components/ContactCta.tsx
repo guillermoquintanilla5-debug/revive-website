@@ -5,11 +5,13 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import QuoteCta from "./QuoteCta";
+import { isLegacyCss } from "../lib/cssMode";
 
 export default function ContactCta() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 

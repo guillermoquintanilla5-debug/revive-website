@@ -5,6 +5,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { attachGradientWave, WaveLine, type WaveWord } from "./GradientWaveText";
+import { isLegacyCss } from "../lib/cssMode";
 
 const PARA_1: WaveWord[] = [
   { text: "Think" },
@@ -57,6 +58,7 @@ export default function SmarterAlternative() {
   const afterRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -85,6 +87,7 @@ export default function SmarterAlternative() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const copy = copyRef.current;
     if (!copy) return;
     return attachGradientWave(
@@ -99,6 +102,7 @@ export default function SmarterAlternative() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const figure = figureRef.current;
     const reveal = revealRef.current;
     const before = beforeRef.current;

@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { isLegacyCss } from "../lib/cssMode";
 
 type BenefitLine = {
   before?: string;
@@ -93,6 +94,7 @@ export default function BetterExperience() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -119,6 +121,7 @@ export default function BetterExperience() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     if (!section) return;
 

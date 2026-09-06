@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { CSSProperties, ReactNode } from "react";
+import { isLegacyCss } from "../lib/cssMode";
 
 export type WaveWord = { text: string; bold?: boolean };
 
@@ -76,6 +77,8 @@ export function attachGradientWave(
   ids: { compact: string; tablet: string; desktop: string },
   starts?: { desktop?: string },
 ) {
+  if (isLegacyCss()) return () => {};
+
   gsap.registerPlugin(ScrollTrigger);
 
   const ctx = gsap.context(() => {

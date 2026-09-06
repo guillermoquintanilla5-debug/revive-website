@@ -5,6 +5,7 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { attachGradientWave, WaveLine, type WaveWord } from "./GradientWaveText";
+import { isLegacyCss } from "../lib/cssMode";
 
 const WARRANTY_COPY: WaveWord[] = [
   { text: "Every" },
@@ -36,6 +37,7 @@ export default function Warranty() {
   const haloRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const section = sectionRef.current;
     const reveal = revealRef.current;
     const motion = motionRef.current;
@@ -179,6 +181,7 @@ export default function Warranty() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const copy = copyRef.current;
     if (!copy) return;
     return attachGradientWave(copy, {
