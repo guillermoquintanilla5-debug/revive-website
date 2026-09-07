@@ -2,11 +2,34 @@ import type { Metadata } from "next";
 import LegalDocument, {
   type LegalSection,
 } from "../components/LegalDocument";
+import { SITE_URL, imageUrl } from "../lib/blog";
+
+const TITLE = "Privacy Policy | Revive Roof Solutions";
+const DESCRIPTION =
+  "Read the Privacy Policy for Revive Roof Solutions and learn how we collect, use, and protect personal information.";
+const CANONICAL = `${SITE_URL}/privacy-policy`;
+const OG_IMAGE = imageUrl("/images/hero-poster.jpg");
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Revive Roof Solutions",
-  description:
-    "Read the Privacy Policy for Revive Roof Solutions and learn how we collect, use, and protect personal information.",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: {
+    canonical: CANONICAL,
+  },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: CANONICAL,
+    type: "website",
+    siteName: "Revive Roof Solutions",
+    images: [{ url: OG_IMAGE, width: 1600, height: 899 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [OG_IMAGE],
+  },
 };
 
 const SECTIONS: LegalSection[] = [
