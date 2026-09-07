@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const GA_MEASUREMENT_ID = "G-BWVS7QZ2WT";
+const GOOGLE_ADS_ID = "AW-18436793858";
 
 declare global {
   interface Window {
@@ -41,7 +42,7 @@ export default function GoogleAnalytics() {
         strategy="afterInteractive"
         onReady={() => setIsInitialized(true)}
       >
-        {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}',{send_page_view:false});`}
+        {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}',{send_page_view:false});gtag('config','${GOOGLE_ADS_ID}');`}
       </Script>
     </>
   );
