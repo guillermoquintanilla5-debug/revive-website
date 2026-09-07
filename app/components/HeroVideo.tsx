@@ -46,7 +46,7 @@ export default function HeroVideo() {
       video.load();
     };
 
-    const desktop = window.matchMedia("(min-width: 1024px)").matches;
+    const desktop = window.matchMedia("(min-width: 1280px)").matches;
     let idleId = 0;
     let fallbackId = 0;
     if (desktop) {

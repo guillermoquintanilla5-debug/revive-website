@@ -93,7 +93,9 @@ html.legacy-css .nav-logo-link {
   left: 50%;
   z-index: 10;
   display: flex;
-  transform: translate(-50%, -50%);
+  align-items: center;
+  justify-content: center;
+  /* Do not set transform/translate here — Tailwind `-translate-*` already centers. */
 }
 
 html.legacy-css .nav-logo {
@@ -121,6 +123,316 @@ html.legacy-css .quote-cta--nav {
   display: none;
 }
 
+/*
+  Legacy mobile (<768): match approved modern mobile proportions.
+  Static / lightweight — no premium motion. Does not affect modern-css.
+*/
+@media (max-width: 767.98px) {
+  html.legacy-css {
+    --header-h: 60px;
+    --nav-logo-h: 40px;
+    --nav-burger: 44px;
+  }
+
+  html.legacy-css .nav-bar {
+    height: var(--header-h);
+    overflow: visible;
+  }
+
+  /* Keep the inner bar a real positioning context so the logo is not clipped. */
+  html.legacy-css .nav-bar > div {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-height: var(--header-h);
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  html.legacy-css .nav-logo-link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  html.legacy-css .nav-logo {
+    display: block;
+    width: auto;
+    height: var(--nav-logo-h);
+    max-width: none;
+    max-height: none;
+  }
+
+  html.legacy-css .site-nav-actions {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+  }
+
+  html.legacy-css .site-nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--nav-burger);
+    height: var(--nav-burger);
+    color: #222;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Lightweight menu panel — React .is-open only, no GSAP. */
+  html.legacy-css .mobile-nav-panel {
+    position: fixed;
+    top: var(--header-h);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - var(--header-h));
+    background: #fff;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0.2s;
+  }
+
+  html.legacy-css .mobile-nav-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  /*
+    Hide on scroll-down / reveal on scroll-up.
+
+    ROOT CAUSE: html/body overflow-x:hidden breaks position:sticky, so the
+    nav scrolls away with the document and cannot return on scroll-up.
+    Use position:fixed on legacy mobile so translateY hide/show is viewport-relative.
+  */
+  html.legacy-css .site-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 50;
+    width: 100%;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    transition:
+      transform 0.32s ease,
+      box-shadow 0.32s ease;
+  }
+
+  /* Reserve the flow space the fixed header no longer occupies. */
+  html.legacy-css main {
+    padding-top: var(--header-h, 60px);
+  }
+
+  html.legacy-css .site-nav.is-nav-hidden,
+  html.legacy-css.nav-hide .site-nav {
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+
+  html.legacy-css .site-nav.is-nav-scrolled:not(.is-nav-hidden) {
+    box-shadow: 0 1px 0 rgb(26 26 26 / 0.07);
+  }
+
+  html.legacy-css.nav-hide .site-nav.is-nav-menu-open,
+  html.legacy-css .site-nav.is-nav-menu-open,
+  html.legacy-css .site-nav.is-nav-menu-open.is-nav-hidden {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+    -webkit-transform: none;
+    transform: none;
+    transition: box-shadow 0.32s ease;
+  }
+
+  html.legacy-css.nav-locked,
+  html.legacy-css.nav-locked body,
+  html.legacy-css body.nav-locked {
+    overflow: hidden;
+  }
+
+  html.legacy-css .hero {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: calc(100vh - var(--header-h)) !important;
+    height: auto !important;
+  }
+
+  html.legacy-css .hero-headline-enter,
+  html.legacy-css .hero-sub-enter,
+  html.legacy-css .hero-cta-enter,
+  html.legacy-css .hero-badge-enter,
+  html.legacy-css .hero-visual-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html.legacy-css .hero-stack {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 0;
+    padding: 0 16px;
+    text-align: center;
+  }
+
+  html.legacy-css .hero-flexspace {
+    display: block;
+    flex: 1 1 0;
+    min-height: 12px;
+  }
+
+  html.legacy-css .hero-cta-spacer {
+    display: block;
+    flex: 0 0 auto;
+    height: 20px;
+  }
+
+  html.legacy-css .hero-headline {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+  }
+
+  html.legacy-css .hero-sub {
+    margin: 20px auto 0;
+    max-width: 22rem;
+    padding: 0 4px;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: 0.02em;
+  }
+
+  html.legacy-css .hero-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0;
+    overflow: hidden;
+  }
+
+  html.legacy-css .quote-cta--heroMobile,
+  html.legacy-css .hero-mob-contact {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 46px;
+    min-height: 46px;
+    padding: 4px 36px 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  html.legacy-css .hero-trust {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding: 0 16px;
+  }
+
+  html.legacy-css .hero-badge-usda {
+    width: 124px;
+    max-width: 32vw;
+    height: auto;
+  }
+
+  html.legacy-css .hero-badge-soy {
+    width: 78px;
+    max-width: 20vw;
+    height: auto;
+  }
+}
+
+@media (max-width: 359.98px) {
+  html.legacy-css .hero-headline {
+    font-size: 30px;
+  }
+
+  html.legacy-css .hero-sub {
+    margin-top: 16px;
+    font-size: 15px;
+    max-width: 20.5rem;
+  }
+
+  html.legacy-css .hero-cta {
+    gap: 10px;
+  }
+
+  html.legacy-css .quote-cta--heroMobile,
+  html.legacy-css .hero-mob-contact {
+    height: 44px;
+    min-height: 44px;
+    padding: 3px 32px 3px 8px;
+    font-size: 11px;
+  }
+
+  html.legacy-css .hero-badge-usda {
+    width: 110px;
+  }
+
+  html.legacy-css .hero-badge-soy {
+    width: 70px;
+  }
+}
+
+@media (min-width: 390px) and (max-width: 767.98px) {
+  html.legacy-css .hero-headline {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 430px) and (max-width: 767.98px) {
+  html.legacy-css .hero-headline {
+    font-size: 40px;
+  }
+
+  html.legacy-css .hero-sub {
+    font-size: 17px;
+  }
+}
+
 @media (min-width: 1024px) {
   html.legacy-css .nav-bar {
     display: block;
@@ -128,11 +440,26 @@ html.legacy-css .quote-cta--nav {
     padding: 0;
   }
 
+  /* Restore desktop nav grid formerly provided by Tailwind lg: (now xl:). */
+  html.legacy-css .nav-bar > div {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   html.legacy-css .nav-logo-link {
     position: static;
     top: auto;
+    right: auto;
+    bottom: auto;
     left: auto;
+    translate: none;
     transform: none;
+    pointer-events: auto;
     justify-self: center;
   }
 
@@ -154,6 +481,10 @@ html.legacy-css .quote-cta--nav {
   html.legacy-css .quote-cta--nav {
     display: inline-flex;
   }
+
+  html.legacy-css .site-nav-actions {
+    justify-self: center;
+  }
 }
 
 /* Hero */
@@ -162,10 +493,16 @@ html.legacy-css .hero {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 28rem !important;
   height: auto !important;
   color: #fff;
   background: #0a0f0c;
+}
+
+/* Tablet legacy keeps the prior compact hero; mobile is overridden below. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  html.legacy-css .hero {
+    min-height: 28rem !important;
+  }
 }
 
 html.legacy-css .hero-visual-enter,
@@ -317,7 +654,182 @@ html.legacy-css .hero-badge-soy {
   }
 }
 
-/* Replace or Revive — static summary cards, natural height */
+/*
+  Final legacy-mobile cascade win (<768).
+  Placed after base hero rules so sizes/composition actually apply.
+*/
+@media (max-width: 767.98px) {
+  html.legacy-css .nav-bar > div {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    min-height: var(--header-h, 60px);
+  }
+
+  html.legacy-css .nav-logo-link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  html.legacy-css .nav-logo {
+    width: auto;
+    height: 40px;
+    max-width: none;
+    max-height: none;
+  }
+
+  html.legacy-css .hero {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: calc(100vh - var(--header-h, 60px)) !important;
+  }
+
+  html.legacy-css .hero-stack {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 0;
+    padding: 0 16px;
+    text-align: center;
+  }
+
+  html.legacy-css .hero-flexspace {
+    display: block;
+    flex: 1 1 0;
+    min-height: 12px;
+    min-height: clamp(12px, 2.5vh, 32px);
+  }
+
+  html.legacy-css .hero-flexspace:last-of-type,
+  html.legacy-css .hero-stack > .hero-flexspace:last-child {
+    min-height: 12px;
+    min-height: clamp(12px, 2vh, 24px);
+  }
+
+  html.legacy-css .hero-cta-spacer {
+    display: block;
+    flex: 0 0 auto;
+    /* Match modern mobile gap under subtitle (clamp(20px, 4svh, 48px)). */
+    height: 20px;
+    height: clamp(20px, 4vh, 48px);
+    min-height: 0;
+  }
+
+  html.legacy-css .hero-headline {
+    margin: 0;
+    /*
+      Modern mobile Hero computes to the system UI sans stack (Montserrat
+      variable is present but not the used face). Match that face here so
+      legacy title/sub don't pick up body-level Montserrat from legacy.css.
+    */
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+    font-size: 36px;
+    font-size: clamp(1.75rem, min(9.3vw, calc(20.4px + 5.22vw)), 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    text-align: center;
+    max-width: none;
+    position: static;
+    top: auto;
+  }
+
+  html.legacy-css .hero-title-mobile > span:first-child {
+    white-space: normal;
+  }
+
+  html.legacy-css .hero-sub {
+    margin: 20px auto 0;
+    margin-top: clamp(1.25rem, max(1.25rem, calc(12.86px + 1.66vw)), 2rem);
+    max-width: 22rem;
+    max-width: min(calc(100vw - 2 * 16px), max(22rem, calc(95.1px + 59.75vw)));
+    padding: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+    font-size: 17px;
+    font-size: clamp(0.9375rem, max(min(4.359vw, 17px), calc(5.42px + 2.49vw)), 1.875rem);
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: 0.02em;
+    text-align: center;
+    color: rgb(255 255 255 / 0.95);
+    position: static;
+    top: auto;
+  }
+
+  html.legacy-css .hero-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 0;
+  }
+
+  html.legacy-css .quote-cta--heroMobile,
+  html.legacy-css .hero-mob-contact {
+    width: 100%;
+    max-width: 100%;
+    height: 46px;
+    min-height: 46px;
+    padding: 4px 36px 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  html.legacy-css .hero-trust {
+    gap: 24px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding: 0 16px;
+  }
+
+  html.legacy-css .hero-badge-usda {
+    width: 124px;
+    max-width: 32vw;
+  }
+
+  html.legacy-css .hero-badge-soy {
+    width: 78px;
+    max-width: 20vw;
+  }
+}
+
+@media (max-width: 359.98px) {
+  html.legacy-css .hero-cta {
+    gap: 10px;
+  }
+
+  html.legacy-css .quote-cta--heroMobile,
+  html.legacy-css .hero-mob-contact {
+    height: 44px;
+    min-height: 44px;
+    padding: 3px 32px 3px 8px;
+    font-size: 11px;
+  }
+
+  html.legacy-css .hero-badge-usda {
+    width: 110px;
+  }
+
+  html.legacy-css .hero-badge-soy {
+    width: 70px;
+  }
+}
+
+/* Replace or Revive — static summary cards, natural height (tablet+) */
 html.legacy-css .hiw,
 html.legacy-css .hiw-viewport-stage,
 html.legacy-css .hiw-content,
@@ -394,7 +906,53 @@ html.legacy-css .hiw-proto-collapsed h3 {
   font-weight: 700;
 }
 
-/* Smarter Alternative — full image, no clip, no reserved gap */
+/*
+ * Legacy mobile only: match modern phone open-state cards (--p: 1).
+ * Inline --p:0 from markup requires !important. Does not touch modern CSS.
+ */
+@media (max-width: 767.98px) {
+  html.legacy-css .hiw-viewport-stage {
+    padding: 0 var(--hiw-pad-x) var(--hiw-pad-bottom);
+  }
+
+  html.legacy-css .hiw-content {
+    padding-top: var(--hiw-pad-top);
+  }
+
+  html.legacy-css .hiw-card-stack {
+    gap: var(--hiw-stack-gap);
+  }
+
+  html.legacy-css .hiw-proto-card {
+    /* Beat React inline style="--p: 0" */
+    --p: 1 !important;
+    height: calc(var(--h0) + (var(--h1) - var(--h0)) * var(--p)) !important;
+    min-height: 0 !important;
+    padding: clamp(0.9rem, 4.6cqi, 1.15rem) clamp(0.95rem, 4.8cqi, 1.2rem);
+    background: #17211c;
+    background: color-mix(
+      in srgb,
+      #e7efe8 calc((1 - var(--p-bg)) * 100%),
+      #17211c calc(var(--p-bg) * 100%)
+    );
+    color: #fff;
+  }
+
+  html.legacy-css .hiw-proto-collapsed {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  html.legacy-css .hiw-proto-expanded {
+    display: grid;
+  }
+
+  html.legacy-css .hiw-proto-index {
+    display: block;
+  }
+}
+
+/* Smarter Alternative — static final state (tablet+ keeps compact flex stack) */
 html.legacy-css .alt {
   padding: 0;
   min-height: 0;
@@ -418,7 +976,7 @@ html.legacy-css .alt-wave-char {
 }
 
 html.legacy-css .alt-title em,
-html.legacy-css .alt-wave-char--hold {
+html.legacy-css .alt-copy .alt-wave-char--hold {
   color: #088635;
 }
 
@@ -456,11 +1014,88 @@ html.legacy-css .alt-figure {
   max-width: 28rem;
 }
 
-/* Warranty — compact static */
-html.legacy-css .warranty {
-  padding: 28px 20px;
+/*
+ * Legacy mobile only: match modern phone final layout (static, no motion).
+ * Uses the same phone geometry as globals @media (max-width: 539.98px).
+ */
+@media (max-width: 767.98px) {
+  html.legacy-css .alt-shell {
+    display: grid;
+    gap: 0 !important;
+    padding: var(--alt-pad-y) var(--alt-pad-x) !important;
+    padding-bottom: clamp(52px, 7.5svh, 64px) !important;
+    grid-template-areas:
+      "title"
+      "copy"
+      "figure";
+  }
+
+  html.legacy-css .alt-title {
+    grid-area: title;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  html.legacy-css .alt-copy {
+    grid-area: copy;
+    width: 100%;
+    max-width: none;
+    margin-top: 24px;
+    gap: 18px;
+  }
+
+  html.legacy-css .alt-copy p {
+    max-width: none;
+    line-height: 1.55;
+    text-align: justify;
+    text-justify: inter-word;
+    text-align-last: start;
+  }
+
+  html.legacy-css .alt-figure {
+    grid-area: figure;
+    width: clamp(270px, 75.6vw, 300px);
+    max-width: none;
+    margin: 30px 0 0;
+    justify-self: center;
+  }
+
+  html.legacy-css .alt-pills {
+    margin-bottom: 16px;
+  }
+
+  html.legacy-css .alt-frame {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    height: auto;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #2b2b2b;
+  }
+
+  html.legacy-css .alt-reveal {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    clip-path: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  html.legacy-css .alt-photo {
+    display: block;
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: center;
+    clip-path: none;
+    transform: none;
+    opacity: 1;
+  }
 }
 
+/* Warranty — static visibility (no entrance motion) */
 html.legacy-css .warranty-badge-reveal,
 html.legacy-css .warranty-title,
 html.legacy-css .warranty-copy,
@@ -469,17 +1104,11 @@ html.legacy-css .warranty-copy span {
   transform: none;
 }
 
-html.legacy-css .warranty-badge {
-  width: 140px;
-  max-width: 42vw;
-  height: auto;
-}
-
 html.legacy-css .warranty-halo {
   display: none;
 }
 
-/* Qualify — real content, no empty photo stage */
+/* Qualify — real photo stage + static visibility */
 html.legacy-css .qualify {
   min-height: 0 !important;
   height: auto !important;
@@ -493,10 +1122,6 @@ html.legacy-css .qualify-photo {
   height: 100%;
   max-width: none;
   object-fit: cover;
-}
-
-html.legacy-css .qualify-shell {
-  padding: 40px 20px;
 }
 
 html.legacy-css .qualify-title,
@@ -519,7 +1144,7 @@ html.legacy-css .qualify-cta {
   visibility: visible;
 }
 
-/* Process */
+/* Process — static final timeline state (nodes on, track filled) */
 html.legacy-css .process-step {
   --on: 1;
 }
@@ -534,10 +1159,87 @@ html.legacy-css .process-step-copy-in {
 }
 
 html.legacy-css .process-track-progress {
-  transform: none;
+  transform: scaleY(1);
+  transform-origin: top center;
 }
 
-/* Gallery — static photo grid, no JS carousel */
+/* Tablet+ legacy: keep previous compact overrides (mobile fixed below) */
+@media (min-width: 768px) {
+  html.legacy-css .warranty {
+    padding: 28px 20px;
+  }
+
+  html.legacy-css .warranty-badge {
+    width: 140px;
+    max-width: 42vw;
+    height: auto;
+  }
+
+  html.legacy-css .qualify-shell {
+    padding: 40px 20px;
+  }
+}
+
+/*
+ * Legacy mobile only — match modern phone final visuals for
+ * Warranty / Qualifies / Process. Static CSS; no shared modern edits.
+ */
+@media (max-width: 767.98px) {
+  /* --- 1. 5-Year Warranty --- */
+  html.legacy-css .warranty {
+    padding: 0;
+  }
+
+  html.legacy-css .warranty-shell {
+    width: min(100%, 46rem);
+    max-width: 100%;
+    padding: 32px clamp(20px, 5.2vw, 48px);
+  }
+
+  html.legacy-css .warranty-badge {
+    width: clamp(9.125rem, 41.5vw, 10.6875rem);
+    max-width: none;
+    height: auto;
+  }
+
+  html.legacy-css .warranty-title,
+  html.legacy-css .warranty-copy {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  }
+
+  /* Wave chars inherit the alt-section ink override (#1a1a1a); restore modern soft white. */
+  html.legacy-css .warranty-copy .alt-wave-char {
+    color: rgb(255 255 255 / 0.82);
+  }
+
+  /* --- 2. See If Your Roof Qualifies --- */
+  html.legacy-css .qualify-shell {
+    padding: 66px 20px 62px;
+  }
+
+  html.legacy-css .qualify-title,
+  html.legacy-css .qualify-copy,
+  html.legacy-css .qualify-text,
+  html.legacy-css .qualify-num,
+  html.legacy-css .qualify-cta-q,
+  html.legacy-css .quote-cta--qualify {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  }
+
+  /* --- 3. Our Process --- */
+  html.legacy-css .process-eyebrow,
+  html.legacy-css .process-title,
+  html.legacy-css .process-step-title,
+  html.legacy-css .process-step-copy,
+  html.legacy-css .process-node-label {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  }
+}
+
+/* Gallery — tablet+ keeps static grid; mobile uses native scroll carousel */
 html.legacy-css .gallery-frame,
 html.legacy-css .gallery-viewport,
 html.legacy-css .gallery-arrow,
@@ -586,6 +1288,137 @@ html.legacy-css .gallery-title {
   }
 }
 
+/*
+ * Legacy mobile Gallery: match modern carousel visuals.
+ * Native overflow scroll + scroll-snap; lightweight CSS entrance only.
+ */
+@media (max-width: 767.98px) {
+  html.legacy-css .legacy-gallery {
+    display: none;
+  }
+
+  html.legacy-css .gallery {
+    padding: 0;
+  }
+
+  html.legacy-css .gallery-shell {
+    padding: clamp(56px, 15.8vw, 68px) 12px 92px;
+  }
+
+  html.legacy-css .gallery-intro {
+    padding-inline: 8px;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  html.legacy-css .gallery-eyebrow,
+  html.legacy-css .gallery-title {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  }
+
+  html.legacy-css .gallery-frame {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  html.legacy-css .gallery-viewport {
+    display: block;
+    width: 100%;
+    height: clamp(260px, 72vw, 290px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    touch-action: pan-x pan-y;
+    cursor: default;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html.legacy-css .gallery-viewport::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  html.legacy-css .gallery-track {
+    display: -webkit-box;
+    display: flex;
+    height: 100%;
+    -webkit-transform: none !important;
+    transform: none !important;
+  }
+
+  html.legacy-css .gallery-card {
+    -webkit-box-flex: 0;
+    flex: 0 0 var(--gallery-slide, 85vw);
+    width: var(--gallery-slide, 85vw);
+    height: 100%;
+    scroll-snap-align: start;
+    opacity: 1;
+    border-radius: var(--gallery-radius, 16px);
+  }
+
+  /* Hide infinite-loop clones used by the modern GSAP track. */
+  html.legacy-css .gallery-card:first-child,
+  html.legacy-css .gallery-card:last-child {
+    display: none;
+  }
+
+  html.legacy-css .gallery-card,
+  html.legacy-css .gallery-card-open,
+  html.legacy-css .gallery-card-media {
+    touch-action: pan-x pan-y;
+  }
+
+  html.legacy-css .gallery-arrow {
+    display: grid;
+  }
+
+  html.legacy-css .gallery-arrow--next {
+    right: calc(100% - var(--gallery-slide, 85vw) + 14px);
+  }
+
+  html.legacy-css .gallery-lb {
+    display: none;
+  }
+
+  /* Lightweight entrance: opacity + translateY once in view */
+  html.legacy-css .gallery.gallery-pending:not(.is-in) .gallery-shell {
+    opacity: 0;
+    -webkit-transform: translateY(18px);
+    transform: translateY(18px);
+  }
+
+  html.legacy-css .gallery.is-in .gallery-shell {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-transition: opacity 0.55s ease, -webkit-transform 0.55s ease;
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.legacy-css .gallery.gallery-pending:not(.is-in) .gallery-shell,
+    html.legacy-css .gallery.is-in .gallery-shell {
+      opacity: 1;
+      -webkit-transform: none;
+      transform: none;
+      -webkit-transition: none;
+      transition: none;
+    }
+
+    html.legacy-css .gallery-viewport {
+      scroll-behavior: auto;
+    }
+  }
+}
+
 /* Better Experience */
 html.legacy-css .experience-row {
   opacity: 1;
@@ -599,7 +1432,7 @@ html.legacy-css .experience-title {
   transform: none;
 }
 
-/* Service / contact / footer / journal */
+/* Service / contact / footer / journal — static final visibility */
 html.legacy-css .service-eyebrow,
 html.legacy-css .service-title,
 html.legacy-css .service-copy,
@@ -609,16 +1442,23 @@ html.legacy-css .contact-cta,
 html.legacy-css .contact-phone,
 html.legacy-css .site-footer-brand,
 html.legacy-css .site-footer-contact,
+html.legacy-css .site-footer-social,
+html.legacy-css .site-footer-mark,
 html.legacy-css .journal-rise {
-  opacity: 1;
-  transform: none;
+  opacity: 1 !important;
+  transform: none !important;
 }
 
-html.legacy-css .contact,
-html.legacy-css .service-shell,
-html.legacy-css .service-map {
-  min-height: 0;
-  height: auto;
+/* Kill modern service entrance CSS if .is-in ever lands on legacy */
+html.legacy-css .service.is-in .service-eyebrow,
+html.legacy-css .service.is-in .service-title,
+html.legacy-css .service.is-in .service-copy,
+html.legacy-css .service.service-pending:not(.is-in) .service-eyebrow,
+html.legacy-css .service.service-pending:not(.is-in) .service-title,
+html.legacy-css .service.service-pending:not(.is-in) .service-copy {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 html.legacy-css .contact-media-img {
@@ -633,4 +1473,94 @@ html.legacy-css .contact-media-img {
 html.legacy-css .site-footer-logo {
   height: auto;
   max-height: none;
+}
+
+/* Tablet+ legacy: never apply hide-on-scroll transform */
+@media (min-width: 768px) {
+  html.legacy-css .site-nav.is-nav-hidden {
+    -webkit-transform: none;
+    transform: none;
+  }
+
+  html.legacy-css .contact,
+  html.legacy-css .service-shell,
+  html.legacy-css .service-map {
+    min-height: 0;
+    height: auto;
+  }
+}
+
+/*
+ * Legacy mobile only — match modern phone finals for
+ * Service Area / Contact CTA / Footer. No GSAP.
+ */
+@media (max-width: 767.98px) {
+  /* --- 1. Service Area --- */
+  html.legacy-css .service-shell {
+    min-height: 0;
+    height: auto;
+  }
+
+  html.legacy-css .service-map {
+    min-height: 280px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+  }
+
+  html.legacy-css .service-eyebrow,
+  html.legacy-css .service-title,
+  html.legacy-css .service-copy {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  }
+
+  /* --- 2. Contact CTA --- */
+  html.legacy-css .contact {
+    min-height: min(78vh, 42rem);
+    height: auto;
+  }
+
+  html.legacy-css .contact-shell {
+    min-height: inherit;
+  }
+
+  html.legacy-css .contact-eyebrow,
+  html.legacy-css .contact-title,
+  html.legacy-css .contact-phone,
+  html.legacy-css .contact .quote-cta--section {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  }
+
+  /* --- 3. Footer --- */
+  html.legacy-css .site-footer-logo {
+    width: clamp(105px, 29.5vw, 125px);
+    max-width: none;
+    height: auto;
+    object-fit: contain;
+  }
+
+  html.legacy-css .site-footer-badge--usda {
+    width: auto;
+    height: clamp(52px, 14.6vw, 58px);
+    object-fit: contain;
+  }
+
+  html.legacy-css .site-footer-badge--soy {
+    width: auto;
+    height: clamp(66px, 18.2vw, 74px);
+    object-fit: contain;
+  }
+
+  html.legacy-css .site-footer-kicker,
+  html.legacy-css .site-footer-tagline,
+  html.legacy-css .site-footer-line,
+  html.legacy-css .site-footer-social-link,
+  html.legacy-css .site-footer-mark,
+  html.legacy-css .site-footer-copy,
+  html.legacy-css .site-footer-policies {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  }
 }

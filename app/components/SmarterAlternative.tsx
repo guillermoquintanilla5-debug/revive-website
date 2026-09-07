@@ -71,6 +71,9 @@ export default function SmarterAlternative() {
     section.classList.add("alt-pending");
 
     const desktop = window.matchMedia("(min-width: 1024px)");
+    const tablet = window.matchMedia(
+      "(min-width: 768px) and (max-width: 1023.98px)",
+    );
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
@@ -79,7 +82,9 @@ export default function SmarterAlternative() {
       },
       desktop.matches
         ? { threshold: 0, rootMargin: "0px" }
-        : { threshold: 0.22, rootMargin: "0px 0px -8% 0px" },
+        : tablet.matches
+          ? { threshold: 0, rootMargin: "18% 0px 0px 0px" }
+          : { threshold: 0.22, rootMargin: "0px 0px -8% 0px" },
     );
 
     observer.observe(section);
@@ -97,7 +102,11 @@ export default function SmarterAlternative() {
         tablet: "alt-copy-wave-tablet",
         desktop: "alt-copy-wave-desktop",
       },
-      { desktop: "top 92%" },
+      {
+        desktop: "top 92%",
+        tablet: "top 96%",
+        tabletEnd: "top 58%",
+      },
     );
   }, []);
 
@@ -239,7 +248,7 @@ export default function SmarterAlternative() {
       );
 
       mm.add("(min-width: 768px) and (max-width: 1023.98px)", () =>
-        bindReveal("alt-compare-reveal-compact", "top 90%", "top 42%", true),
+        bindReveal("alt-compare-reveal-compact", "top 98%", "top 62%", 0.55),
       );
 
       mm.add("(min-width: 1024px)", () =>

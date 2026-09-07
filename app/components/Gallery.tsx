@@ -220,6 +220,27 @@ export default function Gallery() {
   const step = useCallback(
     (dir: number) => {
       if (lightbox) return;
+      if (isLegacyCss()) {
+        const viewport = viewportRef.current;
+        if (!viewport) return;
+        const cards = [
+          ...viewport.querySelectorAll<HTMLElement>(".gallery-card"),
+        ].filter((card) => getComputedStyle(card).display !== "none");
+        if (!cards.length) return;
+        const x = viewport.scrollLeft;
+        let idx = 0;
+        for (let i = 0; i < cards.length; i += 1) {
+          if (cards[i].offsetLeft <= x + 12) idx = i;
+        }
+        const next = Math.max(0, Math.min(cards.length - 1, idx + dir));
+        const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)")
+          .matches;
+        viewport.scrollTo({
+          left: cards[next].offsetLeft,
+          behavior: smooth ? "smooth" : "auto",
+        });
+        return;
+      }
       if (posRef.current <= 0) {
         posRef.current = COUNT;
         applyPos(COUNT);
@@ -319,6 +340,7 @@ export default function Gallery() {
   }, [findReturnImage, lightbox]);
 
   const openLightbox = useCallback((index: number, opener: HTMLElement) => {
+    if (isLegacyCss()) return;
     if (lbBusyRef.current || lightbox) return;
     const img = opener.querySelector<HTMLImageElement>(".gallery-photo");
     originRectRef.current = img ? paintedRect(img) : opener.getBoundingClientRect();
@@ -409,6 +431,58 @@ export default function Gallery() {
     return () => ctx.revert();
   }, []);
 
+  /* Legacy mobile: CSS entrance + native scroll carousel (no GSAP). */
+  useEffect(() => {
+    if (!isLegacyCss()) return;
+    if (typeof window === "undefined") return;
+    if (!window.matchMedia("(max-width: 767.98px)").matches) return;
+
+    const section =
+      sectionRef.current ?? document.getElementById("gallery");
+    const viewport =
+      viewportRef.current ??
+      section?.querySelector<HTMLElement>(".gallery-viewport");
+    if (!(section instanceof HTMLElement) || !viewport) return;
+
+    section.classList.add("is-ready");
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let observer: IntersectionObserver | null = null;
+    let fallback = 0;
+
+    const reveal = () => {
+      section.classList.add("is-in");
+      if (fallback) window.clearTimeout(fallback);
+      fallback = 0;
+      observer?.disconnect();
+      observer = null;
+    };
+
+    if (reduce.matches) {
+      reveal();
+    } else {
+      section.classList.add("gallery-pending");
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) reveal();
+        },
+        { threshold: 0.08 },
+      );
+      observer.observe(section);
+      fallback = window.setTimeout(reveal, 1200);
+    }
+
+    const syncPrev = () => setShowPrev(viewport.scrollLeft > 10);
+    syncPrev();
+    viewport.addEventListener("scroll", syncPrev, { passive: true });
+
+    return () => {
+      if (fallback) window.clearTimeout(fallback);
+      observer?.disconnect();
+      viewport.removeEventListener("scroll", syncPrev);
+    };
+  }, []);
+
   useLayoutEffect(() => {
     if (isLegacyCss()) return;
     const section = sectionRef.current;
@@ -437,9 +511,15 @@ export default function Gallery() {
   }, [measure]);
 
   useLayoutEffect(() => {
-    if (isLegacyCss()) return;
     const prev = prevBtnRef.current;
     if (!prev) return;
+    if (isLegacyCss()) {
+      prev.style.visibility = showPrev ? "visible" : "hidden";
+      prev.style.opacity = showPrev ? "1" : "0";
+      prev.tabIndex = showPrev ? 0 : -1;
+      prev.setAttribute("aria-hidden", showPrev ? "false" : "true");
+      return;
+    }
     const reduce = reduceRef.current;
     gsap.to(prev, {
       autoAlpha: showPrev ? 1 : 0,
@@ -825,6 +905,8 @@ export default function Gallery() {
       className="gallery"
       aria-labelledby="gallery-heading"
       inert={lightbox ? true : undefined}
+      // Legacy boot script may pre-seed is-ready/gallery-pending before hydrate.
+      suppressHydrationWarning
     >
       <div className="gallery-shell">
         <header className="gallery-intro">
@@ -867,6 +949,13 @@ export default function Gallery() {
             type="button"
             className="gallery-arrow gallery-arrow--prev"
             aria-label="Previous gallery image"
+            aria-hidden={showPrev ? undefined : true}
+            tabIndex={showPrev ? 0 : -1}
+            style={
+              showPrev
+                ? undefined
+                : { visibility: "hidden", opacity: 0 }
+            }
             onClick={() => step(-1)}
           >
             <span className="gallery-arrow-mark">

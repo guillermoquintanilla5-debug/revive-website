@@ -8,6 +8,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   detectActiveSection,
+  headerHeight,
   isSamePageHref,
   isSamePageNavLocked,
   resolveNavSection,
@@ -16,6 +17,7 @@ import {
   sectionIdFromHref,
 } from "../lib/samePageNav";
 import QuoteCta from "./QuoteCta";
+import { isLegacyCss } from "../lib/cssMode";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -94,6 +96,7 @@ export default function Navbar() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     measure();
     const track = trackRef.current;
     if (!track) return;
@@ -145,15 +148,32 @@ export default function Navbar() {
     let lastY = window.scrollY;
     let hidden = false;
     let ticking = false;
+    const legacy = isLegacyCss();
+    // Legacy: hide-on-scroll is mobile-only. Modern keeps all-viewport behavior.
+    const legacyMobileMq = window.matchMedia("(max-width: 767.98px)");
 
     const paint = (hide: boolean, scrolled: boolean) => {
       header.classList.toggle("is-nav-hidden", hide);
       header.classList.toggle("is-nav-scrolled", scrolled);
+      // Mirror onto <html> for legacy so React className re-renders cannot wipe hide state.
+      if (legacy) {
+        document.documentElement.classList.toggle(
+          "nav-hide",
+          hide && legacyMobileMq.matches,
+        );
+      }
     };
 
     const update = () => {
       ticking = false;
       const y = Math.max(0, window.scrollY);
+
+      if (legacy && !legacyMobileMq.matches) {
+        hidden = false;
+        lastY = y;
+        paint(false, y > TOP);
+        return;
+      }
 
       if (menuOpenRef.current || isSamePageNavLocked() || y <= TOP) {
         hidden = false;
@@ -176,9 +196,25 @@ export default function Navbar() {
       requestAnimationFrame(update);
     };
 
+    const onLegacyMq = () => {
+      if (!legacy) return;
+      hidden = false;
+      lastY = Math.max(0, window.scrollY);
+      paint(false, lastY > TOP);
+    };
+
     paint(false, lastY > TOP);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    if (legacy) {
+      legacyMobileMq.addEventListener("change", onLegacyMq);
+    }
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (legacy) {
+        legacyMobileMq.removeEventListener("change", onLegacyMq);
+        document.documentElement.classList.remove("nav-hide");
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -188,6 +224,7 @@ export default function Navbar() {
     }
 
     headerRef.current?.classList.remove("is-nav-hidden");
+    document.documentElement.classList.remove("nav-hide");
     document.documentElement.classList.add("nav-locked");
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -217,7 +254,7 @@ export default function Navbar() {
       }
     };
 
-    const media = window.matchMedia("(min-width: 1024px)");
+    const media = window.matchMedia("(min-width: 1280px)");
     const onDesktop = () => {
       if (media.matches) closeMenu();
     };
@@ -252,14 +289,28 @@ export default function Navbar() {
       else history.pushState(null, "", pathname || "/");
       closeMenu();
       headerRef.current?.classList.remove("is-nav-hidden");
+      document.documentElement.classList.remove("nav-hide");
 
       const run = () => {
         unlockPage();
-        scrollToSamePage(target, hash, {
-          updateHash: false,
-          onComplete: releaseSpy,
-          onInterrupt: releaseSpy,
-        });
+        if (isLegacyCss()) {
+          if (target === "top") {
+            window.scrollTo(0, 0);
+          } else {
+            const y =
+              target.getBoundingClientRect().top +
+              window.scrollY -
+              headerHeight();
+            window.scrollTo(0, Math.max(0, y));
+          }
+          releaseSpy();
+        } else {
+          scrollToSamePage(target, hash, {
+            updateHash: false,
+            onComplete: releaseSpy,
+            onInterrupt: releaseSpy,
+          });
+        }
         if (event && event.detail === 0 && target !== "top") {
           const heading =
             target.querySelector<HTMLElement>("h1, h2, [id$='-heading']") ??
@@ -296,6 +347,11 @@ export default function Navbar() {
     let cancelled = false;
     const jump = () => {
       if (cancelled || !el.isConnected) return;
+      if (isLegacyCss()) {
+        el.scrollIntoView({ block: "start" });
+        releaseSpy();
+        return;
+      }
       gsap.registerPlugin(ScrollTrigger);
       ScrollTrigger.refresh();
       scrollToSamePage(el, hash, {
@@ -331,20 +387,32 @@ export default function Navbar() {
         return;
       }
       if (!hash) {
-        scrollToSamePage("top", "", {
-          updateHash: false,
-          onComplete: releaseSpy,
-          onInterrupt: releaseSpy,
-        });
+        if (isLegacyCss()) {
+          window.scrollTo(0, 0);
+          releaseSpy();
+        } else {
+          scrollToSamePage("top", "", {
+            updateHash: false,
+            onComplete: releaseSpy,
+            onInterrupt: releaseSpy,
+          });
+        }
         return;
       }
       const el = document.getElementById(hash.slice(1));
       if (el) {
-        scrollToSamePage(el, hash, {
-          updateHash: false,
-          onComplete: releaseSpy,
-          onInterrupt: releaseSpy,
-        });
+        if (isLegacyCss()) {
+          const y =
+            el.getBoundingClientRect().top + window.scrollY - headerHeight();
+          window.scrollTo(0, Math.max(0, y));
+          releaseSpy();
+        } else {
+          scrollToSamePage(el, hash, {
+            updateHash: false,
+            onComplete: releaseSpy,
+            onInterrupt: releaseSpy,
+          });
+        }
       } else {
         spyHoldRef.current = false;
       }
@@ -354,7 +422,7 @@ export default function Navbar() {
   }, [pathname, releaseSpy]);
 
   useLayoutEffect(() => {
-    if (pathname !== "/") return;
+    if (pathname !== "/" || isLegacyCss()) return;
 
     gsap.registerPlugin(ScrollTrigger);
     const sync = () => {
@@ -381,6 +449,7 @@ export default function Navbar() {
   }, [pathname]);
 
   useLayoutEffect(() => {
+    if (isLegacyCss()) return;
     const track = trackRef.current;
     const ink = inkRef.current;
     if (!track || !ink) return;
@@ -451,26 +520,26 @@ export default function Navbar() {
       className={`site-nav${menuOpen ? " is-nav-menu-open" : ""}`}
     >
       <div className="nav-enter nav-bar relative z-50 h-[var(--header-h)] w-full bg-white">
-      <div className="relative flex h-full w-full items-center justify-end px-5 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-0">
+      <div className="relative flex h-full w-full items-center justify-end px-5 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:px-0">
         <Link
           href="/"
           onClick={(event) => {
             if (!goToHref("/", event)) closeMenu();
           }}
-          className="nav-logo-link absolute top-1/2 left-1/2 z-10 flex min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center lg:static lg:z-auto lg:min-h-0 lg:min-w-0 lg:translate-x-0 lg:translate-y-0 lg:justify-self-center"
+          className="nav-logo-link absolute top-1/2 left-1/2 z-10 flex min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center xl:static xl:z-auto xl:min-h-0 xl:min-w-0 xl:translate-x-0 xl:translate-y-0 xl:justify-self-center"
         >
           <Image
             src="/images/logo.png"
             alt="Revive Roof Solutions"
             width={1192}
             height={560}
-            sizes="(min-width: 1024px) 180px, 140px"
-            className="nav-logo h-10 w-auto max-lg:h-[var(--nav-logo-h)] lg:h-[clamp(38px,3.3vw,58px)]"
+            sizes="(min-width: 1280px) 180px, 140px"
+            className="nav-logo h-10 w-auto max-xl:h-[var(--nav-logo-h)] xl:h-[clamp(38px,3.3vw,58px)]"
             priority
           />
         </Link>
 
-        <nav className="site-nav-desktop relative hidden text-[clamp(11.5px,0.979vw,17px)] leading-none lg:flex">
+        <nav className="site-nav-desktop relative hidden text-[clamp(11.5px,0.979vw,17px)] leading-none xl:flex">
           {shifted && (
             <button
               type="button"
@@ -529,13 +598,13 @@ export default function Navbar() {
           )}
         </nav>
 
-        <div className="site-nav-actions relative z-20 flex h-full items-center justify-self-end lg:justify-self-center">
+        <div className="site-nav-actions relative z-20 flex h-full items-center justify-self-end xl:justify-self-center">
           <QuoteCta size="nav">Free Quote</QuoteCta>
 
           <button
             ref={toggleRef}
             type="button"
-            className="site-nav-toggle flex size-11 items-center justify-center text-revive-ink max-lg:size-[var(--nav-burger)] lg:hidden"
+            className="site-nav-toggle flex size-11 items-center justify-center text-revive-ink max-xl:size-[var(--nav-burger)] xl:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
@@ -546,6 +615,7 @@ export default function Navbar() {
               }
               menuOpenRef.current = true;
               headerRef.current?.classList.remove("is-nav-hidden");
+              document.documentElement.classList.remove("nav-hide");
               headerRef.current?.classList.add("is-nav-menu-open");
               setMenuOpen(true);
             }}
@@ -555,7 +625,7 @@ export default function Navbar() {
                 <path d="M2 2l14 14M16 2 2 16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
             ) : (
-              <svg className="h-[16px] w-[22px] max-lg:h-[36%] max-lg:w-[50%]" viewBox="0 0 22 16" fill="none" aria-hidden="true">
+              <svg className="h-[16px] w-[22px] max-xl:h-[36%] max-xl:w-[50%]" viewBox="0 0 22 16" fill="none" aria-hidden="true">
                 <path d="M1 1.5h20M1 8h20M1 14.5h20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
             )}
@@ -567,7 +637,7 @@ export default function Navbar() {
       <div
         ref={panelRef}
         id="mobile-nav"
-        className={`mobile-nav-panel lg:hidden ${menuOpen ? "is-open" : ""}`}
+        className={`mobile-nav-panel xl:hidden ${menuOpen ? "is-open" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label="Menu"

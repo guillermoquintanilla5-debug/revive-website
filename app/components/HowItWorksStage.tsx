@@ -121,6 +121,10 @@ export default function HowItWorksStage({
       const bindDiscrete = () => {
         const opened = [false, false, false, false];
         const tweens: Array<gsap.core.Tween | undefined> = [];
+        /* ~25% slower expand than 0.48; staggered starts space the sequence. */
+        const openDuration = 0.6;
+        const closeDuration = 0.52;
+        const starts = ["top 76%", "top 70%", "top 64%", "top 58%"] as const;
 
         const setOpen = (index: number, open: boolean) => {
           if (opened[index] === open) return;
@@ -128,7 +132,7 @@ export default function HowItWorksStage({
           tweens[index]?.kill();
           tweens[index] = gsap.to(cards[index], {
             "--p": open ? 1 : 0,
-            duration: 0.48,
+            duration: open ? openDuration : closeDuration,
             ease: open ? "power2.out" : "power2.in",
             overwrite: true,
           });
@@ -140,7 +144,7 @@ export default function HowItWorksStage({
           ScrollTrigger.create({
             id: `hiw-card-mobile-${index}`,
             trigger: card,
-            start: "top 78%",
+            start: starts[index] ?? "top 70%",
             end: "max",
             pin: false,
             onEnter: () => setOpen(index, true),
@@ -156,9 +160,10 @@ export default function HowItWorksStage({
       };
 
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px)", () => bindScrub(0.1, "top 64%", true));
+      /* True desktop scrub — xl. Large tablets stay on tablet scrub (no 100svh stage). */
+      mm.add("(min-width: 1280px)", () => bindScrub(0.1, "top 64%", true));
       mm.add(
-        "(min-width: 768px) and (max-width: 1023.98px)",
+        "(min-width: 768px) and (max-width: 1279.98px)",
         () => bindScrub(0.11, "top 66%", false),
       );
       mm.add("(max-width: 767.98px)", () => bindDiscrete());

@@ -75,7 +75,7 @@ export function WaveLine({
 export function attachGradientWave(
   copy: HTMLElement,
   ids: { compact: string; tablet: string; desktop: string },
-  starts?: { desktop?: string },
+  starts?: { desktop?: string; tablet?: string; tabletEnd?: string },
 ) {
   if (isLegacyCss()) return () => {};
 
@@ -138,8 +138,19 @@ export function attachGradientWave(
     );
 
     mm.add(
-      "(prefers-reduced-motion: no-preference) and (min-width: 540px) and (max-width: 1023.98px)",
-      () => bindWave(ids.tablet, "top 72%", "bottom 52%", 0.7),
+      "(prefers-reduced-motion: no-preference) and (min-width: 540px) and (max-width: 767.98px)",
+      () => bindWave(`${ids.tablet}-sm`, "top 72%", "bottom 52%", 0.7),
+    );
+
+    mm.add(
+      "(prefers-reduced-motion: no-preference) and (min-width: 768px) and (max-width: 1023.98px)",
+      () =>
+        bindWave(
+          ids.tablet,
+          starts?.tablet ?? "top 72%",
+          starts?.tabletEnd ?? "bottom 52%",
+          0.7,
+        ),
     );
 
     mm.add(

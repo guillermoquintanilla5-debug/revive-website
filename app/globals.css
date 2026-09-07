@@ -20,11 +20,11 @@ body {
 
 /*
   Mobile/tablet hero — calibrated to the approved 390×844 composition.
-  Tokens live below 1024px only. Desktop (lg+) is locked via Tailwind in Hero.tsx.
+  Tokens live below 1280px (xl) for modern only. True desktop Hero/Nav at xl (1280+).
 
   Phone (≤430): approved vw formulas, existing caps — 390×844 stays identical.
-  Tablet (430–1023): a shallower second line takes over so type/controls keep growing
-  toward ~912 without a 2.3× linear blow-up. Flexible space absorbs height.
+  Tablet (430–1279): a shallower second line takes over so type/controls keep growing
+  toward large iPad without a 2.3× linear blow-up. Flexible space absorbs height.
 */
 .hero {
   min-height: calc(100vh - var(--header-h));
@@ -32,14 +32,14 @@ body {
   min-height: calc(100dvh - var(--header-h));
 }
 
-@media (max-width: 1023.98px) {
-  :root {
+@media (max-width: 1279.98px) {
+  html.modern-css {
     --header-h: clamp(60px, max(60px, calc(49.29px + 2.49vw)), 72px);
     --nav-logo-h: clamp(40px, max(40px, calc(23.96px + 3.73vw)), 58px);
     --nav-burger: clamp(44px, max(44px, calc(34.29px + 2.07vw)), 56px);
   }
 
-  .hero {
+  html.modern-css .hero {
     --hero-pad-x: clamp(12px, max(4.102564vw, calc(-1.94px + 4.6vw)), 48px);
     --hero-pad-top: calc(clamp(20px, 14svh, 96px) + max(0px, 0.04 * (100vw - 430px)));
     --hero-headline: clamp(1.75rem, min(9.3vw, calc(20.4px + 5.22vw)), 4.5rem);
@@ -62,12 +62,7 @@ body {
     --hero-soy: clamp(3.75rem, max(min(20vw, 78px), calc(24.5px + 12.45vw)), 8.75rem);
   }
 
-  .hiw {
-    --hero-headline: clamp(1.75rem, min(9.3vw, calc(20.4px + 5.22vw)), 4.5rem);
-    --hero-sub: clamp(0.9375rem, max(min(4.359vw, 17px), calc(5.42px + 2.49vw)), 1.875rem);
-  }
-
-  .hero-stack {
+  html.modern-css .hero-stack {
     padding-inline: var(--hero-pad-x);
     padding-top: 0;
     min-width: 0;
@@ -75,13 +70,13 @@ body {
     min-height: min-content;
   }
 
-  .hero-headline {
+  html.modern-css .hero .hero-headline {
     font-size: var(--hero-headline);
     line-height: 1.1;
     letter-spacing: -0.035em;
   }
 
-  .hero-sub {
+  html.modern-css .hero .hero-sub {
     margin-inline: auto;
     margin-top: var(--hero-sub-mt);
     max-width: var(--hero-sub-max);
@@ -96,22 +91,22 @@ body {
     Near-equal shares, with a slight extra weight on top so the group
     sits a little below the midpoint of the space above the badges.
   */
-  .hero-flexspace:first-child {
+  html.modern-css .hero-flexspace:first-child {
     flex: 1 1 0;
     min-height: clamp(12px, 2.5svh, 32px);
   }
-  .hero-flexspace:last-child {
+  html.modern-css .hero-flexspace:last-child {
     flex: 1 1 0;
     min-height: clamp(12px, 2svh, 24px);
   }
 
   /* Compact intentional gap between subtitle and CTAs */
-  .hero-cta-spacer {
+  html.modern-css .hero-cta-spacer {
     height: clamp(20px, 4svh, 48px);
     flex: 0 0 auto;
   }
 
-  .hero-cta {
+  html.modern-css .hero-cta {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: stretch;
@@ -125,7 +120,7 @@ body {
     gap: 12px;
   }
 
-  .hero-cta-btn {
+  html.modern-css .hero-cta-btn {
     height: var(--hero-cta-h);
     width: var(--hero-cta-w);
     flex: 0 1 auto;
@@ -134,7 +129,7 @@ body {
     font-size: var(--hero-cta-fs);
   }
 
-  .hero-trust {
+  html.modern-css .hero-trust {
     margin-inline: auto;
     margin-top: var(--hero-badge-mt);
     margin-bottom: var(--hero-badge-mb);
@@ -145,14 +140,21 @@ body {
     padding-inline: var(--hero-badge-px);
   }
 
-  .hero-badge-usda {
+  html.modern-css .hero-badge-usda {
     width: var(--hero-usda);
     height: auto;
   }
 
-  .hero-badge-soy {
+  html.modern-css .hero-badge-soy {
     width: var(--hero-soy);
     height: auto;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .hiw {
+    --hero-headline: clamp(1.75rem, min(9.3vw, calc(20.4px + 5.22vw)), 4.5rem);
+    --hero-sub: clamp(0.9375rem, max(min(4.359vw, 17px), calc(5.42px + 2.49vw)), 1.875rem);
   }
 }
 
@@ -620,6 +622,140 @@ body {
   }
 }
 
+/*
+  Large tablet / iPad Pro (1024–1279): keep the approved tablet Hero CTA
+  composition — do not flip to desktop orb CTAs until xl (1280).
+  Modern only — legacy keeps its own 1024 desktop CTA rules.
+*/
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  html.modern-css .hero-mob-cta {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  html.modern-css .hero-desk-quote,
+  html.modern-css .hero-desk-contact {
+    display: none !important;
+  }
+
+  html.modern-css .hero-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    justify-content: stretch;
+    box-sizing: border-box;
+    width: calc(100vw - 2 * var(--hero-pad-x));
+    max-width: calc(100vw - 2 * var(--hero-pad-x));
+    min-width: 0;
+    margin-inline: 0;
+    overflow: hidden;
+    gap: clamp(12px, 1.4vw, 18px);
+  }
+
+  html.modern-css .quote-cta--heroMobile,
+  html.modern-css .hero-mob-contact {
+    --cta-h: clamp(46px, calc(14px + 3.125vw), 56px);
+    --cta-orb: clamp(30px, calc(10px + 1.95vw), 36px);
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: var(--cta-h);
+    min-height: var(--cta-h);
+    padding: 4px 40px 4px 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    background: #088635;
+    font-size: clamp(12px, calc(6.4px + 0.55vw), 14px);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  html.modern-css .quote-cta--heroMobile .quote-cta-orb,
+  html.modern-css .hero-mob-contact .quote-cta-orb {
+    display: none;
+  }
+
+  html.modern-css .quote-cta--heroMobile .quote-cta-label,
+  html.modern-css .hero-mob-contact .quote-cta-label {
+    display: block;
+    position: static;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  html.modern-css .quote-cta--heroMobile .quote-cta-label > span:first-child,
+  html.modern-css .hero-mob-contact .quote-cta-label > span:first-child {
+    display: block;
+    width: 100%;
+    overflow: visible;
+    line-height: 1;
+  }
+
+  html.modern-css .quote-cta--heroMobile .quote-cta-label > span:last-child,
+  html.modern-css .hero-mob-contact .quote-cta-label > span:last-child {
+    display: none;
+    transform: none;
+  }
+
+  html.modern-css .quote-cta--heroMobile .quote-cta-mark,
+  html.modern-css .hero-mob-contact .quote-cta-mark {
+    display: grid !important;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    bottom: 4px;
+    z-index: 3;
+    flex: none;
+    place-items: center;
+    box-sizing: border-box;
+    width: var(--cta-orb, 30px);
+    height: var(--cta-orb, 30px);
+    margin-block: auto;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.3);
+    color: #fff;
+    font-size: clamp(12px, calc(7.2px + 0.47vw), 14px);
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  html.modern-css .hero-mob-contact {
+    border: 1px solid rgb(255 255 255 / 0.24);
+    border-radius: 999px;
+    background: rgb(122 122 122 / 0.86);
+    color: #fff;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    isolation: isolate;
+    transform-origin: center center;
+  }
+
+  html.modern-css .hero-mob-contact .quote-cta-mark {
+    background: rgb(255 255 255 / 0.26);
+    font-weight: 600;
+  }
+
+  html.modern-css .hero-mob-contact:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+}
+
 @media (max-width: 359.98px) {
   .hero-cta {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -654,6 +790,53 @@ body {
     display: none;
   }
 
+  .quote-cta--section {
+    width: auto;
+    min-width: 18rem;
+    min-height: 58px;
+    padding: 6px 6px 6px 28px;
+    font-size: 0.9375rem;
+  }
+
+  .quote-cta--section .quote-cta-orb {
+    width: 44px;
+    height: 44px;
+  }
+
+  .quote-cta--qualify {
+    min-height: 54px;
+    padding: 6px 6px 6px 22px;
+    font-size: 0.9375rem;
+  }
+
+  .quote-cta--qualify .quote-cta-orb {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* True desktop Hero CTAs + nav quote — xl (1280+). iPad Pro 1024 stays tablet. */
+@media (min-width: 1280px) {
+  .quote-cta--nav {
+    display: inline-flex;
+    height: clamp(34px, 2.71vw, 47px);
+    gap: 10px;
+    padding: 3px 4px 3px clamp(14px, 1.4vw, 20px);
+    font-size: clamp(12px, 0.99vw, 15px);
+    letter-spacing: 0.05em;
+  }
+
+  .quote-cta--nav .quote-cta-orb {
+    width: clamp(24px, 2vw, 32px);
+    height: clamp(24px, 2vw, 32px);
+  }
+
+  .quote-cta--nav .quote-cta-arrow,
+  .quote-cta--nav .quote-cta-arrow svg {
+    width: 11px;
+    height: 11px;
+  }
+
   .hero-cta-enter {
     opacity: 1;
     animation: none;
@@ -685,53 +868,9 @@ body {
   .hero-desk-contact .quote-cta-orb {
     background: rgb(255 255 255 / 0.26);
   }
-
-  .quote-cta--nav {
-    display: inline-flex;
-    height: clamp(34px, 2.71vw, 47px);
-    gap: 10px;
-    padding: 3px 4px 3px clamp(14px, 1.4vw, 20px);
-    font-size: clamp(12px, 0.99vw, 15px);
-    letter-spacing: 0.05em;
-  }
-
-  .quote-cta--nav .quote-cta-orb {
-    width: clamp(24px, 2vw, 32px);
-    height: clamp(24px, 2vw, 32px);
-  }
-
-  .quote-cta--nav .quote-cta-arrow,
-  .quote-cta--nav .quote-cta-arrow svg {
-    width: 11px;
-    height: 11px;
-  }
-
-  .quote-cta--section {
-    width: auto;
-    min-width: 18rem;
-    min-height: 58px;
-    padding: 6px 6px 6px 28px;
-    font-size: 0.9375rem;
-  }
-
-  .quote-cta--section .quote-cta-orb {
-    width: 44px;
-    height: 44px;
-  }
-
-  .quote-cta--qualify {
-    min-height: 54px;
-    padding: 6px 6px 6px 22px;
-    font-size: 0.9375rem;
-  }
-
-  .quote-cta--qualify .quote-cta-orb {
-    width: 40px;
-    height: 40px;
-  }
 }
 
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 1280px) and (prefers-reduced-motion: no-preference) {
   .hero-desk-quote {
     animation: hero-desk-cta-in 0.5s var(--quote-ease, cubic-bezier(0.16, 1, 0.3, 1))
       0.62s both;
@@ -836,8 +975,8 @@ body {
   }
 }
 
-@media (max-width: 1023.98px) and (hover: none) and (prefers-reduced-motion: no-preference),
-  (max-width: 1023.98px) and (pointer: coarse) and (prefers-reduced-motion: no-preference) {
+@media (max-width: 1279.98px) and (hover: none) and (prefers-reduced-motion: no-preference),
+  (max-width: 1279.98px) and (pointer: coarse) and (prefers-reduced-motion: no-preference) {
   .quote-cta:active .quote-cta-mark,
   .hero-mob-contact:active .quote-cta-mark {
     transform: scale(0.94) translateX(3px);
@@ -1154,6 +1293,12 @@ html.nav-locked body {
   .hiw-title {
     width: 100%;
     text-align: center;
+  }
+}
+
+/* True desktop HIW title: single-line. Large tablets keep stacked tablet title. */
+@media (min-width: 1280px) {
+  .hiw-title {
     white-space: nowrap;
   }
 
@@ -1647,6 +1792,221 @@ html.nav-locked body {
   }
 }
 
+/*
+  Modern tablet only (768–1023.98): keep the approved desktop horizontal
+  composition (icon → label → value → description → number), but retune
+  proportions so nothing clips. Does not apply below 768 (phone) or at
+  ≥1024 (see large-tablet block below for modern 1024–1279).
+*/
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .hiw {
+    --hiw-pad-x: clamp(20px, 3vw, 32px);
+    --hiw-pad-top: clamp(36px, 4.8svh, 56px);
+    --hiw-pad-bottom: clamp(36px, 4.8svh, 56px);
+    --hiw-sub-gap: clamp(24px, 3svh, 34px);
+    --hiw-stack-gap: clamp(16px, 2vw, 22px);
+    --hiw-h1: clamp(5.85rem, 11.2svh, 7.5rem);
+    --hiw-h0: clamp(4.5rem, calc(var(--hiw-h1) * 0.7), var(--hiw-h1));
+    --hiw-max: min(56rem, calc(100vw - 2 * var(--hiw-pad-x)));
+    --hiw-stack-max: min(56rem, calc(100vw - 2 * var(--hiw-pad-x)));
+  }
+
+  /*
+    Modern tablet spacing only: a bit more room after Hero and before Alt.
+    Content-driven — no viewport min-height / empty shingle field.
+  */
+  html.modern-css .hiw {
+    --hiw-pad-top: clamp(48px, 6.2svh, 72px);
+    --hiw-pad-bottom: clamp(52px, 6.8svh, 80px);
+  }
+
+  /* Content-driven height: drop the forced full-viewport stage. */
+  .hiw-viewport-stage {
+    min-height: 0;
+    height: auto;
+  }
+
+  .hiw-proto-card {
+    padding-block: min(
+      4.2%,
+      max(10px, calc((var(--h1) - min(3.85rem, var(--h1) * 0.52)) / 2))
+    );
+    padding-inline: clamp(1rem, 2.6cqi, 1.35rem);
+  }
+
+  .hiw-proto-expanded {
+    inset: clamp(0.85rem, 2.4cqi, 1.15rem);
+    right: clamp(2.6rem, 5.5cqi, 3.1rem);
+  }
+
+  .hiw-proto-visual {
+    margin-right: clamp(0.7rem, 1.55cqi, 1.05rem);
+  }
+
+  .hiw-proto-visual-bg,
+  .hiw-proto-card--money .hiw-proto-visual-bg,
+  .hiw-proto-card--life .hiw-proto-visual-bg,
+  .hiw-proto-card--hours .hiw-proto-visual-bg {
+    width: clamp(3.25rem, 6.4cqi, 4rem);
+    height: clamp(3.25rem, 6.4cqi, 4rem);
+  }
+
+  .hiw-proto-kicker,
+  .hiw-proto-card--money .hiw-proto-kicker,
+  .hiw-proto-card--life .hiw-proto-kicker,
+  .hiw-proto-card--hours .hiw-proto-kicker {
+    margin-right: clamp(0.6rem, 1.35cqi, 0.95rem);
+    font-size: clamp(0.9375rem, 1.7cqi, 1.125rem);
+    letter-spacing: 0.05em;
+  }
+
+  .hiw-proto-stat {
+    margin-right: clamp(0.7rem, 1.5cqi, 1.05rem);
+    font-size: clamp(2.85rem, 5.4cqi, 3.65rem);
+    letter-spacing: -0.04em;
+  }
+
+  .hiw-proto-card--money .hiw-proto-stat,
+  .hiw-proto-card--life .hiw-proto-stat,
+  .hiw-proto-card--hours .hiw-proto-stat {
+    font-size: clamp(2.35rem, 4.5cqi, 3.1rem);
+    letter-spacing: -0.045em;
+  }
+
+  .hiw-proto-support,
+  .hiw-proto-card--money .hiw-proto-support,
+  .hiw-proto-card--life .hiw-proto-support,
+  .hiw-proto-card--hours .hiw-proto-support {
+    flex: 0 0 auto;
+    min-width: auto;
+    font-size: clamp(0.9375rem, 1.8cqi, 1.125rem);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .hiw-proto-index {
+    top: 50%;
+    right: clamp(0.85rem, 2.2cqi, 1.15rem);
+    font-size: clamp(0.8125rem, 1.55cqi, 0.95rem);
+    transform: translateY(-50%);
+  }
+}
+
+/*
+  Modern large tablet / iPad Pro (1024–1279): same content-driven tablet HIW
+  family as 768–1023. Root cause at 1024 was desktop `.hiw-viewport-stage
+  { min-height: 100svh }` — not ScrollTrigger pinSpacing.
+  True desktop HIW (≥1280) keeps the viewport-stage min-height.
+*/
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  html.modern-css .hiw {
+    --hiw-pad-x: clamp(20px, 3vw, 32px);
+    --hiw-pad-top: clamp(48px, 6.2svh, 72px);
+    --hiw-pad-bottom: clamp(52px, 6.8svh, 80px);
+    --hiw-sub-gap: clamp(24px, 3svh, 34px);
+    --hiw-stack-gap: clamp(16px, 2vw, 22px);
+    --hiw-h1: clamp(5.85rem, 11.2svh, 7.5rem);
+    --hiw-h0: clamp(4.5rem, calc(var(--hiw-h1) * 0.7), var(--hiw-h1));
+    --hiw-max: min(56rem, calc(100vw - 2 * var(--hiw-pad-x)));
+    --hiw-stack-max: min(56rem, calc(100vw - 2 * var(--hiw-pad-x)));
+  }
+
+  html.modern-css .hiw-viewport-stage {
+    min-height: 0;
+    height: auto;
+  }
+
+  /* Match approved tablet title presence (not desktop lg: / not 16px IACVT). */
+  html.modern-css .hiw-title {
+    font-size: calc(16px + 3.8vw);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1.09;
+    white-space: normal;
+  }
+
+  html.modern-css .hiw-title-or,
+  html.modern-css .hiw-title-revive {
+    display: block;
+  }
+
+  html.modern-css .hiw-sub {
+    margin-top: clamp(12px, 1.5svh, 16px);
+    max-width: none;
+    color: rgb(255 255 255 / 0.94);
+    font-size: clamp(1.0625rem, 1.82vw, 1.25rem);
+    font-weight: 400;
+    letter-spacing: 0.022em;
+    line-height: 1.42;
+  }
+
+  /* Locked tablet card retune — same as 768–1023 block. */
+  html.modern-css .hiw-proto-card {
+    padding-block: min(
+      4.2%,
+      max(10px, calc((var(--h1) - min(3.85rem, var(--h1) * 0.52)) / 2))
+    );
+    padding-inline: clamp(1rem, 2.6cqi, 1.35rem);
+  }
+
+  html.modern-css .hiw-proto-expanded {
+    inset: clamp(0.85rem, 2.4cqi, 1.15rem);
+    right: clamp(2.6rem, 5.5cqi, 3.1rem);
+  }
+
+  html.modern-css .hiw-proto-visual {
+    margin-right: clamp(0.7rem, 1.55cqi, 1.05rem);
+  }
+
+  html.modern-css .hiw-proto-visual-bg,
+  html.modern-css .hiw-proto-card--money .hiw-proto-visual-bg,
+  html.modern-css .hiw-proto-card--life .hiw-proto-visual-bg,
+  html.modern-css .hiw-proto-card--hours .hiw-proto-visual-bg {
+    width: clamp(3.25rem, 6.4cqi, 4rem);
+    height: clamp(3.25rem, 6.4cqi, 4rem);
+  }
+
+  html.modern-css .hiw-proto-kicker,
+  html.modern-css .hiw-proto-card--money .hiw-proto-kicker,
+  html.modern-css .hiw-proto-card--life .hiw-proto-kicker,
+  html.modern-css .hiw-proto-card--hours .hiw-proto-kicker {
+    margin-right: clamp(0.6rem, 1.35cqi, 0.95rem);
+    font-size: clamp(0.9375rem, 1.7cqi, 1.125rem);
+    letter-spacing: 0.05em;
+  }
+
+  html.modern-css .hiw-proto-stat {
+    margin-right: clamp(0.7rem, 1.5cqi, 1.05rem);
+    font-size: clamp(2.85rem, 5.4cqi, 3.65rem);
+    letter-spacing: -0.04em;
+  }
+
+  html.modern-css .hiw-proto-card--money .hiw-proto-stat,
+  html.modern-css .hiw-proto-card--life .hiw-proto-stat,
+  html.modern-css .hiw-proto-card--hours .hiw-proto-stat {
+    font-size: clamp(2.35rem, 4.5cqi, 3.1rem);
+    letter-spacing: -0.045em;
+  }
+
+  html.modern-css .hiw-proto-support,
+  html.modern-css .hiw-proto-card--money .hiw-proto-support,
+  html.modern-css .hiw-proto-card--life .hiw-proto-support,
+  html.modern-css .hiw-proto-card--hours .hiw-proto-support {
+    flex: 0 0 auto;
+    min-width: auto;
+    font-size: clamp(0.9375rem, 1.8cqi, 1.125rem);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  html.modern-css .hiw-proto-index {
+    top: 50%;
+    right: clamp(0.85rem, 2.2cqi, 1.15rem);
+    font-size: clamp(0.8125rem, 1.55cqi, 0.95rem);
+    transform: translateY(-50%);
+  }
+}
+
 /* Smarter Alternative — editorial specimen after the dark HIW scene.
    Own identity: light paper, sentence-case type, no cards. */
 .alt {
@@ -1826,6 +2186,78 @@ html.nav-locked body {
 
   .alt-figure {
     width: min(100%, 24rem);
+  }
+}
+
+/*
+  Modern tablet only (768–1023.98): compressed desktop composition —
+  heading span + copy | figure. Not a phone stack.
+*/
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .alt {
+    --alt-pad-x: clamp(32px, 4.4vw, 48px);
+    --alt-pad-y: clamp(72px, 9svh, 108px);
+    --alt-title: clamp(2.45rem, calc(1rem + 3.6vw), 3.2rem);
+    --alt-body: clamp(1.22rem, calc(0.95rem + 0.85vw), 1.4rem);
+    --alt-max: 100%;
+  }
+
+  .alt-shell {
+    width: 100%;
+    grid-template-columns: minmax(15rem, 1fr) minmax(15.5rem, min(27.5rem, 48vw));
+    grid-template-areas:
+      "title title"
+      "copy figure";
+    align-items: start;
+    column-gap: clamp(28px, 3.8vw, 48px);
+    row-gap: clamp(40px, 5vw, 64px);
+  }
+
+  .alt-title {
+    grid-area: title;
+    max-width: 15.5em;
+    line-height: 1.06;
+  }
+
+  .alt-copy {
+    grid-area: copy;
+    max-width: 22.5rem;
+    padding-top: 0;
+    gap: 1.15em;
+  }
+
+  .alt-copy p {
+    max-width: none;
+    color: var(--alt-ink);
+    line-height: 1.58;
+  }
+
+  .alt-figure {
+    grid-area: figure;
+    width: min(100%, 27.5rem);
+    justify-self: end;
+    margin-top: calc(-1 * clamp(20px, 2.4vw, 36px));
+  }
+
+  .alt-pills {
+    margin-bottom: 0.5rem;
+    column-gap: 0.55rem;
+  }
+
+  .alt-pill {
+    box-sizing: border-box;
+    width: 74%;
+    min-width: 0;
+    justify-content: center;
+    padding: 0.8em 0.45em 0.72em;
+    font-size: clamp(0.8125rem, 1.2vw, 1rem);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+
+  .alt-frame {
+    aspect-ratio: 3 / 2;
+    border-radius: 14px;
   }
 }
 
@@ -5357,7 +5789,7 @@ a.site-footer-line:focus-visible,
   }
 }
 
-/* Mobile CTA cascade lock — after later unscoped wrappers. Desktop 1024+ untouched. */
+/* Mobile CTA cascade lock — after later unscoped wrappers. */
 @media (max-width: 1023.98px) {
   .hero-desk-quote,
   .hero-desk-contact {
@@ -5428,6 +5860,55 @@ a.site-footer-line:focus-visible,
 
   .quote-cta-label > span:last-child {
     display: none;
+  }
+}
+
+/* Large tablet Hero cascade lock — modern only; legacy 1024+ desktop Hero untouched. */
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  html.modern-css .hero-desk-quote,
+  html.modern-css .hero-desk-contact {
+    display: none !important;
+  }
+
+  html.modern-css .hero-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    box-sizing: border-box;
+    width: calc(100vw - 2 * var(--hero-pad-x));
+    max-width: calc(100vw - 2 * var(--hero-pad-x));
+    min-width: 0;
+    overflow: hidden;
+    gap: clamp(12px, 1.4vw, 18px);
+  }
+
+  html.modern-css .hero-mob-cta {
+    display: flex;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  html.modern-css .quote-cta--heroMobile,
+  html.modern-css .hero-mob-contact {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  html.modern-css .quote-cta--heroMobile .quote-cta-label,
+  html.modern-css .hero-mob-contact .quote-cta-label {
+    overflow: visible;
+  }
+
+  html.modern-css .quote-cta--heroMobile .quote-cta-label > span:last-child,
+  html.modern-css .hero-mob-contact .quote-cta-label > span:last-child {
+    display: none;
+  }
+
+  html.modern-css .quote-cta--heroMobile .quote-cta-mark,
+  html.modern-css .hero-mob-contact .quote-cta-mark {
+    display: grid !important;
   }
 }
 
