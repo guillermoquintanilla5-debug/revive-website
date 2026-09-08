@@ -2578,6 +2578,12 @@ html.nav-locked body {
   }
 }
 
+@media (min-width: 1280px) {
+  html.modern-css .alt-figure {
+    transform: translateY(60px);
+  }
+}
+
 /* 5-Year Warranty — centered proof band after Smarter Alternative. */
 .warranty {
   background: #0e1712;

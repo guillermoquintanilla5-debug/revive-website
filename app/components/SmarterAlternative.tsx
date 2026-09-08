@@ -21,32 +21,45 @@ const PARA_1: WaveWord[] = [
   { text: "shingles" },
   { text: "age," },
   { text: "they" },
-  { text: "become" },
-  { text: "drier" },
+  { text: "lose" },
+  { text: "essential" },
+  { text: "oils," },
+  { text: "becoming" },
+  { text: "dry," },
+  { text: "brittle," },
   { text: "and" },
-  { text: "less" },
-  { text: "flexible." },
+  { text: "more" },
+  { text: "vulnerable" },
+  { text: "to" },
+  { text: "cracking," },
+  { text: "curling," },
+  { text: "and" },
+  { text: "weather" },
+  { text: "damage." },
 ];
 
 const PARA_2: WaveWord[] = [
-  { text: "Roof" },
-  { text: "rejuvenation" },
-  { text: "helps" },
-  { text: "revitalize", bold: true },
-  { text: "aging" },
+  { text: "Our" },
+  { text: "soy-based rejuvenation treatment", bold: true },
+  { text: "penetrates" },
+  { text: "the" },
   { text: "shingles" },
-  { text: "from" },
-  { text: "within," },
-  { text: "improving" },
-  { text: "their" },
-  { text: "condition" },
+  { text: "to" },
+  { text: "help" },
+  { text: "restore flexibility,", bold: true },
+  { text: "improve" },
+  { text: "granule adhesion,", bold: true },
   { text: "and" },
+  { text: "protect" },
+  { text: "against" },
+  { text: "UV and harsh weather,", bold: true },
   { text: "helping" },
-  { text: "them" },
-  { text: "continue" },
-  { text: "performing" },
-  { text: "as" },
-  { text: "intended." },
+  { text: "your" },
+  { text: "roof" },
+  { text: "perform" },
+  { text: "better" },
+  { text: "for" },
+  { text: "longer." },
 ];
 
 export default function SmarterAlternative() {
@@ -104,6 +117,7 @@ export default function SmarterAlternative() {
       },
       {
         desktop: "top 92%",
+        desktopEnd: "bottom 68%",
         tablet: "top 96%",
         tabletEnd: "top 58%",
       },
@@ -262,7 +276,7 @@ export default function SmarterAlternative() {
   return (
     <section
       ref={sectionRef}
-      id="smarter-alternative"
+      id="how-it-works"
       className="alt"
       aria-labelledby="alt-heading"
     >

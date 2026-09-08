@@ -71,6 +71,13 @@ export default function Navbar() {
     pathname === "/" ? spySection : sectionIdFromHref(pathname);
 
   useEffect(() => {
+    if (!isLegacyCss()) return;
+    const root = document.documentElement;
+    root.classList.add("legacy-nav-react-ready");
+    return () => root.classList.remove("legacy-nav-react-ready");
+  }, []);
+
+  useEffect(() => {
     menuOpenRef.current = menuOpen;
   }, [menuOpen]);
 

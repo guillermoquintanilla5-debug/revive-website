@@ -3,7 +3,7 @@ import HowItWorksStage from "./HowItWorksStage";
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="hiw" aria-labelledby="hiw-heading">
+    <section className="hiw" aria-labelledby="hiw-heading">
       <HowItWorksStage
         media={
           <div className="hiw-media" aria-hidden="true">
