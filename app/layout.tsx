@@ -9,6 +9,7 @@ import appleTouchIcon from "./apple-touch-icon.png";
 import icon192 from "./icon-192.png";
 import icon512 from "./icon-512.png";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+import MetaPixel from "./components/MetaPixel";
 
 const CAPABILITY_BOOT = `(function(){var r=document.documentElement;var force=false;try{force=/(?:^|[?&])legacy=1(?:&|$)/.test(location.search)}catch(e){}var modern=false;try{modern=!!(window.CSS&&CSS.supports&&CSS.supports("color","color-mix(in srgb,#088635,#000)"))}catch(e){}if(force||!modern){r.classList.add("legacy-css")}else{r.classList.add("js","modern-css")}})();`;
 
@@ -57,6 +58,7 @@ export default function RootLayout({
       <body className={`${montserrat.variable} font-sans antialiased`}>
         {children}
         <GoogleAnalytics />
+        <MetaPixel />
         <Script id="twipla-tracking" strategy="afterInteractive">
           {`(function(v,i,s,a,t){v[t]=v[t]||function(){(v[t].v=v[t].v||[]).push(arguments)};if(!v._visaSettings){v._visaSettings={}}v._visaSettings[a]={v:'1.0',s:a,a:'1',t:t};var b=i.getElementsByTagName('body')[0];var p=i.createElement('script');p.defer=1;p.async=1;p.src=s+'?s='+a;b.appendChild(p)})(window,document,'//app-worker.visitor-analytics.io/main.js','a32a6368-ab00-11f1-9c4b-960004340fd3','va')`}
         </Script>

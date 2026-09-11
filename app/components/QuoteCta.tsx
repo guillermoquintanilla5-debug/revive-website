@@ -1,4 +1,7 @@
-import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+"use client";
+
+import type { ComponentPropsWithoutRef, MouseEvent, ReactNode, Ref } from "react";
+import { withForwardedAttribution } from "../lib/attributionParams";
 
 export const QUOTE_HREF = "https://revive-quote-app.vercel.app/quote-request";
 
@@ -39,12 +42,20 @@ export default function QuoteCta({
   className,
   children,
   ref,
+  onClick,
   ...rest
 }: QuoteCtaProps) {
+  function handleClick(event: MouseEvent<HTMLAnchorElement>) {
+    onClick?.(event);
+    const anchor = event.currentTarget;
+    anchor.href = withForwardedAttribution(anchor.href);
+  }
+
   return (
     <a
       ref={ref}
       href={href}
+      onClick={handleClick}
       className={["quote-cta", `quote-cta--${size}`, className]
         .filter(Boolean)
         .join(" ")}
