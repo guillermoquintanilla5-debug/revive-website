@@ -57,7 +57,7 @@ export default function Hero() {
             Get Your Free Quote
           </QuoteCta>
           <a
-            href="https://api.whatsapp.com/send?phone=16137013088"
+            href="tel:+16137013088"
             className="hero-desk-contact"
           >
             <span className="quote-cta-label">

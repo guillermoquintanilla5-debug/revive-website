@@ -99,7 +99,7 @@ export default function Footer() {
               <p className="site-footer-kicker">Contact</p>
               <ul className="site-footer-list">
                 <li>
-                  <a href="tel:6137013088" className="site-footer-line">
+                  <a href="tel:+16137013088" className="site-footer-line">
                     <Phone strokeWidth={1.75} aria-hidden="true" />
                     <span>613-701-3088</span>
                   </a>

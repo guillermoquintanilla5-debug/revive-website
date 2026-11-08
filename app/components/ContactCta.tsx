@@ -109,7 +109,7 @@ export default function ContactCta() {
         </div>
         <p className="contact-phone">
           <span className="contact-phone-lead">Prefer to talk? </span>
-          <a href="tel:6137013088">613-701-3088</a>
+          <a href="tel:+16137013088">613-701-3088</a>
         </p>
       </div>
     </section>
