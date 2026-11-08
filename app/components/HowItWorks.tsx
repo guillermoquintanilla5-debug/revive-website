@@ -31,7 +31,7 @@ export default function HowItWorks() {
               <span className="hiw-title-mark">?</span>
             </span>
           </h2>
-          <p className="hiw-sub hero-sub font-normal xl:text-[clamp(17px,1.82vw,31px)] xl:leading-[1.4] xl:tracking-[0.035em]">
+          <p className="hiw-sub hero-sub font-normal xl:text-[clamp(1.0625rem,1.82vw,1.9375rem)] xl:leading-[1.4] xl:tracking-[0.035em]">
             See why homeowners choose roof rejuvenation.
           </p>
         </header>

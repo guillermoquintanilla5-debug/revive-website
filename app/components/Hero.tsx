@@ -21,10 +21,10 @@ export default function Hero() {
       </div>
       <div className="hero-dim absolute inset-0 bg-black/65" />
 
-      <div className="hero-stack relative z-10 flex min-h-min w-full flex-1 flex-col text-center xl:block xl:min-h-0 xl:flex-none xl:px-[clamp(20px,4.5vw,96px)] xl:pt-0 xl:text-left">
+      <div className="hero-stack relative z-10 flex min-h-min w-full flex-1 flex-col text-center xl:block xl:min-h-0 xl:flex-none xl:px-[clamp(1.25rem,4.5vw,6rem)] xl:pt-0 xl:text-left">
         <div aria-hidden="true" className="hero-flexspace xl:hidden" />
 
-        <h1 className="hero-headline-enter hero-headline font-extrabold xl:text-[clamp(35px,5.35vw,94px)] xl:leading-[1.06] xl:tracking-[0.038em]">
+        <h1 className="hero-headline-enter hero-headline font-extrabold xl:text-[clamp(2.1875rem,5.35vw,5.875rem)] xl:leading-[1.06] xl:tracking-[0.038em]">
           <span className="hero-title-mobile xl:hidden">
             <span className="block">
               <span className="hero-accent text-revive-green">Save Thousands</span>{" "}
@@ -43,13 +43,13 @@ export default function Hero() {
           </span>
         </h1>
 
-        <p className="hero-sub-enter hero-sub font-normal xl:mx-0 xl:mt-[clamp(10px,2vw,28px)] xl:max-w-[24.5em] xl:text-[clamp(17px,1.82vw,31px)] xl:leading-[1.4] xl:tracking-[0.035em] xl:text-white">
+        <p className="hero-sub-enter hero-sub font-normal xl:mx-0 xl:mt-[clamp(0.625rem,2vw,1.75rem)] xl:max-w-[24.5em] xl:text-[clamp(1.0625rem,1.82vw,1.9375rem)] xl:leading-[1.4] xl:tracking-[0.035em] xl:text-white">
           Professional roof rejuvenation and exterior home services throughout Ottawa and surrounding areas.
         </p>
 
         <div className="hero-cta-spacer xl:hidden" />
 
-        <div className="hero-cta hero-cta-enter xl:mt-[clamp(18px,2.65vw,46px)] xl:flex xl:flex-nowrap xl:items-center xl:justify-start xl:gap-4 xl:translate-y-[clamp(28px,5.5vw,72px)]">
+        <div className="hero-cta hero-cta-enter xl:mt-[clamp(1.125rem,2.65vw,2.875rem)] xl:flex xl:flex-nowrap xl:items-center xl:justify-start xl:gap-4 xl:translate-y-[clamp(1.75rem,5.5vw,4.5rem)]">
           <span className="hero-mob-cta xl:hidden">
             <QuoteCta size="heroMobile">Free Quote</QuoteCta>
           </span>
@@ -93,7 +93,7 @@ export default function Hero() {
         <div aria-hidden="true" className="hero-flexspace xl:hidden" />
       </div>
 
-      <div className="hero-trust relative z-10 flex items-center justify-center xl:absolute xl:right-[clamp(20px,5.42vw,96px)] xl:bottom-[clamp(20px,8.87vh,96px)] xl:mx-0 xl:mt-0 xl:mb-0 xl:justify-start xl:gap-[clamp(20px,4.09vw,71px)] xl:px-0">
+      <div className="hero-trust relative z-10 flex items-center justify-center xl:absolute xl:right-[clamp(1.25rem,5.42vw,6rem)] xl:bottom-[clamp(1.25rem,8.87vh,6rem)] xl:mx-0 xl:mt-0 xl:mb-0 xl:justify-start xl:gap-[clamp(1.25rem,4.09vw,4.4375rem)] xl:px-0">
         <span className="hero-badge-enter">
           <Image
             src="/images/badge-usda.png"
@@ -101,7 +101,7 @@ export default function Hero() {
             width={640}
             height={305}
             sizes="(min-width: 1280px) 12vw, 32vw"
-            className="hero-badge-usda h-auto xl:w-[clamp(120px,11.25vw,198px)]"
+            className="hero-badge-usda h-auto xl:w-[clamp(7.5rem,11.25vw,12.375rem)]"
           />
         </span>
         <span className="hero-badge-enter">
@@ -111,7 +111,7 @@ export default function Hero() {
             width={512}
             height={455}
             sizes="(min-width: 1280px) 8vw, 20vw"
-            className="hero-badge-soy h-auto xl:w-[clamp(74px,7.0vw,123px)]"
+            className="hero-badge-soy h-auto xl:w-[clamp(4.625rem,7.0vw,7.6875rem)]"
           />
         </span>
       </div>

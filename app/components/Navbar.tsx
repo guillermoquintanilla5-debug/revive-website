@@ -40,7 +40,7 @@ function Chevron({ direction }: { direction: "left" | "right" }) {
     <svg
       aria-hidden="true"
       viewBox="0 0 8 16"
-      className="h-[clamp(12px,1.05vw,18px)] w-auto text-revive-ink"
+      className="h-[clamp(0.75rem,1.05vw,1.125rem)] w-auto text-revive-ink"
       fill="none"
     >
       {direction === "left" ? (
@@ -541,12 +541,12 @@ export default function Navbar() {
             width={1192}
             height={560}
             sizes="(min-width: 1280px) 180px, 140px"
-            className="nav-logo h-10 w-auto max-xl:h-[var(--nav-logo-h)] xl:h-[clamp(38px,3.3vw,58px)]"
+            className="nav-logo h-10 w-auto max-xl:h-[var(--nav-logo-h)] xl:h-[clamp(2.375rem,3.3vw,3.625rem)]"
             priority
           />
         </Link>
 
-        <nav className="site-nav-desktop relative hidden text-[clamp(11.5px,0.979vw,17px)] leading-none xl:flex">
+        <nav className="site-nav-desktop relative hidden text-[clamp(0.71875rem,0.979vw,1.0625rem)] leading-none xl:flex">
           {shifted && (
             <button
               type="button"
@@ -561,7 +561,7 @@ export default function Navbar() {
           <div ref={viewportRef} className="max-w-[46.5vw] overflow-hidden">
             <ul
               ref={trackRef}
-              className="relative flex w-max items-start gap-[clamp(24px,3.97vw,68px)] will-change-transform"
+              className="relative flex w-max items-start gap-[clamp(1.5rem,3.97vw,4.25rem)] will-change-transform"
               style={{
                 transform: shifted
                   ? `translateX(-${shiftPx > 0 ? `${shiftPx}px` : "8.8vw"})`
@@ -579,7 +579,7 @@ export default function Navbar() {
                       onClick={(event) => {
                         goToHref(link.href, event);
                       }}
-                      className="relative inline-flex flex-col items-center pb-[5px] font-light tracking-[0.125em] whitespace-nowrap text-revive-ink transition-colors hover:text-revive-green"
+                      className="relative inline-flex flex-col items-center pb-[0.3125rem] font-light tracking-[0.125em] whitespace-nowrap text-revive-ink transition-colors hover:text-revive-green"
                       aria-current={isActive ? "page" : undefined}
                     >
                       <span className="-mr-[0.125em] inline-block">
