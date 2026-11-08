@@ -35,27 +35,8 @@ const mobileNavLinks = [
   { label: "Blog", href: "/blog" },
 ];
 
-function Chevron({ direction }: { direction: "left" | "right" }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 8 16"
-      className="h-[clamp(0.75rem,1.05vw,1.125rem)] w-auto text-revive-ink"
-      fill="none"
-    >
-      {direction === "left" ? (
-        <path d="M6.6 1 1.4 8l5.2 7" stroke="currentColor" strokeWidth="1.35" />
-      ) : (
-        <path d="M1.4 1 6.6 8l-5.2 7" stroke="currentColor" strokeWidth="1.35" />
-      )}
-    </svg>
-  );
-}
-
 export default function Navbar() {
   const pathname = usePathname();
-  const [shifted, setShifted] = useState(false);
-  const [shiftPx, setShiftPx] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [spySection, setSpySection] = useState<string | null>("home");
   const headerRef = useRef<HTMLElement>(null);
@@ -64,7 +45,6 @@ export default function Navbar() {
   const inkPrimedRef = useRef(false);
   const trackRef = useRef<HTMLUListElement>(null);
   const inkRef = useRef<HTMLSpanElement>(null);
-  const viewportRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const activeSection =
@@ -80,40 +60,6 @@ export default function Navbar() {
   useEffect(() => {
     menuOpenRef.current = menuOpen;
   }, [menuOpen]);
-
-  const measure = useCallback(() => {
-    const track = trackRef.current;
-    const viewport = viewportRef.current;
-    if (!track || !viewport) return;
-
-    const items = [...track.querySelectorAll("li")] as HTMLElement[];
-    const first = items[0];
-    const contact = items.find((item) => {
-      const href = item.querySelector("a")?.getAttribute("href");
-      return href === "/contact" || href === "/#contact";
-    });
-    if (!first || !contact) return;
-
-    const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
-    setShiftPx(first.offsetWidth + gap);
-
-    // Viewport ends at CONTACT so BLOG is clipped; the right chevron overlays CONTACT.
-    const width = contact.offsetLeft + contact.offsetWidth - first.offsetLeft;
-    viewport.style.width = `${width}px`;
-  }, []);
-
-  useLayoutEffect(() => {
-    if (isLegacyCss()) return;
-    measure();
-    const track = trackRef.current;
-    if (!track) return;
-
-    const observer = new ResizeObserver(measure);
-    observer.observe(track);
-    void document.fonts?.ready.then(measure);
-
-    return () => observer.disconnect();
-  }, [measure]);
 
   const unlockPage = useCallback(() => {
     const html = document.documentElement;
@@ -494,6 +440,10 @@ export default function Navbar() {
     };
 
     align(true);
+    // Re-align once webfonts load or the link widths change.
+    void document.fonts?.ready.then(() => align(false));
+    const observer = new ResizeObserver(() => align(false));
+    observer.observe(track);
     let refreshTimer = 0;
     const onResize = () => {
       align(false);
@@ -505,11 +455,12 @@ export default function Navbar() {
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onResize);
     return () => {
+      observer.disconnect();
       window.clearTimeout(refreshTimer);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", onResize);
     };
-  }, [activeSection, shifted, shiftPx, pathname]);
+  }, [activeSection, pathname]);
 
   const isLinkActive = (href: string) => {
     const section = sectionIdFromHref(href);
@@ -547,62 +498,32 @@ export default function Navbar() {
         </Link>
 
         <nav className="site-nav-desktop relative hidden text-[clamp(0.71875rem,0.979vw,1.0625rem)] leading-none xl:flex">
-          {shifted && (
-            <button
-              type="button"
-              aria-label="Show previous navigation items"
-              onClick={() => setShifted(false)}
-              className="nav-chevron nav-chevron-left absolute top-0 left-0 z-10 flex h-[1em] w-4 items-center justify-start bg-white"
-            >
-              <Chevron direction="left" />
-            </button>
-          )}
+          <ul
+            ref={trackRef}
+            className="relative flex w-max items-start gap-[clamp(1.5rem,3.97vw,4.25rem)]"
+          >
+            {navLinks.map((link) => {
+              const isActive = isLinkActive(link.href);
 
-          <div ref={viewportRef} className="max-w-[46.5vw] overflow-hidden">
-            <ul
-              ref={trackRef}
-              className="relative flex w-max items-start gap-[clamp(1.5rem,3.97vw,4.25rem)] will-change-transform"
-              style={{
-                transform: shifted
-                  ? `translateX(-${shiftPx > 0 ? `${shiftPx}px` : "8.8vw"})`
-                  : "translateX(0)",
-                transition: "transform 480ms cubic-bezier(0.22, 1, 0.36, 1)",
-              }}
-            >
-              {navLinks.map((link) => {
-                const isActive = isLinkActive(link.href);
-
-                return (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      onClick={(event) => {
-                        goToHref(link.href, event);
-                      }}
-                      className="relative inline-flex flex-col items-center pb-[0.3125rem] font-light tracking-[0.125em] whitespace-nowrap text-revive-ink transition-colors hover:text-revive-green"
-                      aria-current={isActive ? "page" : undefined}
-                    >
-                      <span className="-mr-[0.125em] inline-block">
-                        {link.label.toUpperCase()}
-                      </span>
-                    </Link>
-                  </li>
-                );
-              })}
-              <span ref={inkRef} className="nav-underline-bar" aria-hidden="true" />
-            </ul>
-          </div>
-
-          {!shifted && (
-            <button
-              type="button"
-              aria-label="Show next navigation items"
-              onClick={() => setShifted(true)}
-              className="nav-chevron nav-chevron-right absolute top-0 right-0 z-10 flex h-[1em] w-4 items-center justify-end bg-white"
-            >
-              <Chevron direction="right" />
-            </button>
-          )}
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={(event) => {
+                      goToHref(link.href, event);
+                    }}
+                    className="relative inline-flex flex-col items-center pb-[0.3125rem] font-light tracking-[0.125em] whitespace-nowrap text-revive-ink transition-colors hover:text-revive-green"
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <span className="-mr-[0.125em] inline-block">
+                      {link.label.toUpperCase()}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+            <span ref={inkRef} className="nav-underline-bar" aria-hidden="true" />
+          </ul>
         </nav>
 
         <div className="site-nav-actions relative z-20 flex h-full items-center justify-self-end xl:justify-self-center">

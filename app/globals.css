@@ -1042,18 +1042,6 @@ body {
     background-color 0.2s ease;
 }
 
-.nav-chevron {
-  transition: transform 0.2s var(--ease-premium);
-}
-
-.nav-chevron-left:hover {
-  transform: translateX(-0.1875rem);
-}
-
-.nav-chevron-right:hover {
-  transform: translateX(0.1875rem);
-}
-
 .nav-underline {
   transform: translateX(-50%) scaleX(0);
   transform-origin: center;
@@ -2517,7 +2505,6 @@ html.nav-locked body {
   .hero-quote-hover,
   .hero-cta-hover,
   .nav-quote-hover,
-  .nav-chevron,
   .nav-underline,
   .nav-underline-bar,
   .mobile-nav-panel,
@@ -2528,9 +2515,7 @@ html.nav-locked body {
   .hero-cta-breathe:hover .hero-quote-hover,
   .hero-cta-breathe:hover .hero-cta-hover,
   .hero-cta-hover:hover,
-  .nav-quote-hover:hover,
-  .nav-chevron-left:hover,
-  .nav-chevron-right:hover {
+  .nav-quote-hover:hover {
     transform: none;
   }
 
